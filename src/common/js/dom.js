@@ -408,3 +408,13 @@ export function delTableDataDetailReturn(chooseTableData, tableDataDetail) {
     tableDataDetail.splice(tableDataDetail.findIndex(item => item.row_index === row_index), 1)
   })
 }
+
+
+/*
+ * 商城前台
+ *
+ */
+// 设置localStorage
+export function setlocalStorage(name, val) {
+  localStorage[name] = val
+}

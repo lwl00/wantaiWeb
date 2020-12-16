@@ -7,6 +7,7 @@ const getters = {
     roles: state => state.user.roles,
     visitedViews: state => state.tagsView.visitedViews,
     permission_routers: state => state.permission.routers,
+    permission_routers_product: state => state.permission.routers.filter(item => item.name == 'Product'),
     addRouters: state => state.permission.addRouters
 }
 export default getters

@@ -3,9 +3,8 @@
   .main-container {
     min-height: 100%;
     transition: margin-left .28s;
-    margin-left: 180px;
-    padding-top: 60px;
     position: relative;
+	padding: 15px 0;
   }
   // 侧边栏
   .sidebar-container {
@@ -54,12 +53,6 @@
     }
   }
   .hideSidebar {
-    .sidebar-container {
-      width: 36px !important;
-    }
-    .main-container {
-      margin-left: 36px;
-    }
     .submenu-title-noDropdown {
       padding-left: 10px !important;
       position: relative;

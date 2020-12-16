@@ -1,7 +1,11 @@
 <template>
 <div :class="classObj" class="app-wrapper">
-    <Header/>
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
+    <Header @isProjectNowFn="isProjectNowFn"/>
+    <div :style="{ height: isProjectNow ? '100px' : '60px' }"></div>
+    <div class="main-container">
+      <AppContainer/>
+    </div>
+    <!-- <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"/>
     <sidebar class="sidebar-container"/>
     <div class="main-container">
         <div class="" style="
@@ -13,24 +17,27 @@
             <tags-view/>
         </div>
         <app-main/>
-    </div>
+    </div> -->
 </div>
 </template>
 
 <script>
-import { Header, Navbar, Sidebar, TagsView, AppMain } from './components'
+// import { Header, Navbar, Sidebar, TagsView, AppMain } from './components'
+import { Header, AppContainer } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
   name: 'Layout',
   components: {
     Header,
-    Navbar,
-    Sidebar,
-    TagsView,
-    AppMain
+    AppContainer
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      isProjectNow: null
+    }
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar
@@ -45,12 +52,25 @@ export default {
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
-    }
+    },
+  },
+  created() {
+    // 读取localStorage中的isProjectNow，转换为Boolean
+    this.isProjectNow = localStorage.getItem('isProjectNow') == 'true' ? true : false
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
+    },
+    isProjectNowFn(val) {
+      this.isProjectNow = val;
     }
+  },
+  watch: {
+    // isProjectNow(newVal, oldVal) {
+    //   console.log(newVal)
+    //   console.log(oldVal)
+    // }
   }
 }
 </script>

@@ -12,7 +12,8 @@
             <el-table-column
               type="selection"
               width="40"
-              align="center">
+              align="center"
+              v-if="isShowSelection">
             </el-table-column>
             <el-table-column type="index" :index="getIndex" width="40" align="center"></el-table-column>
 
@@ -98,6 +99,10 @@ export default {
             type: Object,
             default: null
         },
+        isShowSelection: {
+            type: Boolean,
+            default: true
+        }
     },
     data() {
         return {

@@ -103,6 +103,7 @@ export default {
   .el-menu-item.is-active,
   #app .sidebar-container .el-submenu .el-menu-item.is-active {
     background-color: #ff6633 !important;
+    color: #fff;
   }
   
   .el-submenu .el-submenu__title:hover,

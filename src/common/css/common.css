@@ -318,3 +318,13 @@
   height: 100px;
   display: block;
 }
+
+
+
+/* 暂无数据 */
+.noDataWarp {
+  padding: 50px 0;
+  text-align: center;
+  background-color: #fff;
+  color: #999;
+}
