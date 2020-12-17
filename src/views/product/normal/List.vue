@@ -71,7 +71,7 @@
                   </div>
                   <div class="infoWarp">
                     <div class="name">{{item.name}}</div>
-                    <div class="crafts">{{item.categoryNames}}</div>
+                    <div class="crafts">{{item.categorysName}}</div>
                     <div class="spec clear">
                       <div class="specText pull-left">{{item.specificationList[0].size}}</div>
                       <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div>
