@@ -67,7 +67,7 @@ export const constantRouterMap = [
     ]
   },
 
-  
+
 
 ]
 
@@ -92,7 +92,15 @@ export const asyncRouterMap = [
         meta: { title: '产品库', icon: '' },
         children: [],
       },
-      
+      {
+        path: '/product/detail',
+        name: 'ProductDetail',
+        component: () => import('@/views/product/normal/Detail'),
+        meta: { title: '产品详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
+
       {
         path: '/product/discount',
         name: 'ProductDiscount',
@@ -100,7 +108,7 @@ export const asyncRouterMap = [
         meta: { title: '折扣专区', icon: '' },
         children: [],
       },
-      
+
       {
         path: '/space',
         name: 'Space',

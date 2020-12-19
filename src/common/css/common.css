@@ -328,3 +328,8 @@
   background-color: #fff;
   color: #999;
 }
+
+.el-image-viewer__close {
+  top: 120px;
+  color: #fff;
+}

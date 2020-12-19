@@ -81,6 +81,7 @@
     background-color: #fff;
     padding: 0 20px;
     margin: 0 20px;
+    box-shadow: 0 6px 9px #ddd;
     .title {
       color: $--color-text-primary;
       span {

@@ -70,7 +70,7 @@
                     <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
                   </div>
                   <div class="infoWarp">
-                    <div class="name">{{item.name}}</div>
+                    <div class="name" @click="routerLink(item)">{{item.name}}</div>
                     <div class="crafts">{{item.categorysName}}</div>
                     <div class="spec clear">
                       <div class="specText pull-left">{{item.specificationList[0].size}}</div>
@@ -79,7 +79,7 @@
                     <div class="price clear">
                       <div class="priceText pull-left">￥<span>{{item.specificationList[0].unitPrice}}</span></div>
                       <div class="priceBtn pull-right">
-                        <el-button type="primary" size="mini" @click="handleAddProjecct(item)">加入方案</el-button>
+                        <el-button type="primary" size="mini" @click="handleAddProject(item)">加入方案</el-button>
                       </div>
                     </div>
                   </div>
@@ -138,7 +138,7 @@
 	  name: "ProductNormal",
 	  data() {
 	    return {
-        loading: false,
+        loading: true,
 
         // options
         options: {
@@ -175,8 +175,6 @@
       }
 		},
     created() {
-
-      this.loading = true
       setlocalStorage('brandId', '')
       setlocalStorage('seriesId', '')
       setlocalStorage('crafts', '')
@@ -274,7 +272,7 @@
       },
 
       // 加入方案  TODO
-      handleAddProjecct(item) {
+      handleAddProject(item) {
         console.log(item)
         let quantity = 1  // 默认数量为1
         let subtotal = item.specificationList[0].unitPrice * quantity  // 小计
@@ -285,25 +283,38 @@
           subtotal: subtotal
         }
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
+        currentProject.productSpecifiList.push(params)
+        currentProject.projectDetailList = currentProject.productSpecifiList
 
-        currentProject.projectDetailList.push(params)
-        editProject(params).then(res => {
+        editProject(currentProject).then(res => {
           if (res.status == 200) {
             this.$message({
-              message: '编辑成功',
+              offset: '120',
+              message: '加入成功',
               type: 'success'
             })
 
             // 选中新增的方案
             setlocalStorage('isProjectNow', true)
-            setlocalStorage('currentProject', res.data)
+            setlocalStorage('currentProject',  JSON.stringify(res.data))
           } else {
             this.$message({
+              offset: '120',
               type: 'error',
               message: res.message
             })
           }
           this.addSaveLoading = false
+        })
+      },
+
+      // 跳转详情页
+      routerLink(item) {
+        this.$router.push({
+          name: 'ProductDetail',
+          query: {
+            id: item.id
+          }
         })
       }
 
@@ -411,6 +422,10 @@
               -webkit-line-clamp: 2;
               line-clamp: 2;
               -webkit-box-orient: vertical;
+              cursor: pointer;
+            }
+            .name:hover {
+              color: $--color-primary;
             }
             .spec {
               .specText {

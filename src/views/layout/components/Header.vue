@@ -158,7 +158,7 @@ import NavNow from './NavNow.vue'
 import Menu from './Menu.vue'
 import { mapGetters } from 'vuex';
 import { getCookie, setlocalStorage } from 'common/js/dom';
-import { logout, getProjectList, addProject, editProject, delProject } from 'api/interface';
+import { logout, getProjectList, getProject, addProject, editProject, delProject } from 'api/interface';
 
 export default {
     name: "headerWarp",
@@ -311,11 +311,18 @@ export default {
       },
       // 双击行选择
       handleDblclick(row) {
+        console.log('双击行选择', row)
         this.isProjectNow = true
         setlocalStorage('isProjectNow', true)
 
         this.currentProject = row
-        setlocalStorage('currentProject', JSON.stringify(row))
+        getProject(row.id).then(res => {
+          this.loading = false
+          if (res.status == 200) {
+            setlocalStorage('currentProject', JSON.stringify(res.data.project))
+          }
+        })
+        // setlocalStorage('currentProject', JSON.stringify(row))
         this.hide('dialog-model-project')
 
         // 传值给父组件
@@ -373,6 +380,7 @@ export default {
           this._getdelProject(this.currentProject.id)
         }).catch(() => {
           this.$message({
+        offset: '120',
             type: 'info',
             message: '已取消删除'
           });
@@ -383,12 +391,14 @@ export default {
         delProject(ids).then(res => {
           if (res.status == 200) {
             this.$message({
+        offset: '120',
               message: '删除成功',
               type: 'success'
             })
             this.handleExitCurrentProject()
           } else if (res.status == 500) {
             this.$message({
+        offset: '120',
               type: 'warning',
               message: res.message
             })
@@ -411,6 +421,7 @@ export default {
               editProject(params).then(res => {
                 if (res.status == 200) {
                   this.$message({
+        offset: '120',
                     message: '编辑成功',
                     type: 'success'
                   })
@@ -423,6 +434,7 @@ export default {
                   this.handleDblclick(res.data)
                 } else {
                   this.$message({
+        offset: '120',
                     type: 'error',
                     message: res.message
                   })
@@ -433,6 +445,7 @@ export default {
               addProject(params).then(res => {
                 if (res.status == 200) {
                   this.$message({
+                    offset: '120',
                     message: '添加成功',
                     type: 'success'
                   })
@@ -445,6 +458,7 @@ export default {
                   this.handleDblclick(res.data)
                 } else {
                   this.$message({
+                    offset: '120',
                     type: 'error',
                     message: res.message
                   })
@@ -455,6 +469,7 @@ export default {
 
           }else {
             this.$message({
+              offset: '120',
               type: 'warning',
               message: '请完善信息'
             })
