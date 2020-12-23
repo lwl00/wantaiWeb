@@ -138,7 +138,6 @@
   import { mapGetters } from 'vuex';
   import { setlocalStorage } from 'common/js/dom';
   import { getProduct, editProject } from 'api/interface';
-  import Header from '../../layout/components/Header.vue'
 
   export default {
     name: "ProductDetail",

@@ -119,11 +119,19 @@ export const asyncRouterMap = [
 
       {
         path: '/space',
-        name: 'Space',
+        name: 'SpaceList',
         component: () => import('@/views/space/List'),
         meta: { title: '空间搭配', icon: '' },
         children: [],
-      }
+      },
+      {
+        path: '/space/detail',
+        name: 'SpaceDetail',
+        component: () => import('@/views/space/Detail'),
+        meta: { title: '空间详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
     ]
   },
 

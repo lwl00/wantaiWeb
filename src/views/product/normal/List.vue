@@ -260,7 +260,7 @@
             res.data.data.forEach((item, index) => {
               item.isShowProLayer = false
               if(!item.imgMain) {
-                item.imgMainSrc = '../../../common/images/image.png'
+                item.imgMainSrc = '/src/common/images/image.png'
               }
               this.table.srcList.push(item.imgMainSrc)
             })
@@ -545,11 +545,7 @@
 
       }
 
-      .wt_pagination{
-        padding: 25px 0;
-        text-align: center;
-        background-color: #fff;
-      }
+      
     }
   }
 </style>

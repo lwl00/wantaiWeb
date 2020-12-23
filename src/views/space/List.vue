@@ -1,258 +1,164 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container" v-loading="loading">
-      <div ref="searchToolbar" class="searchToolbar">
-        <Search
-          :buttonList="buttonList"
-          :searchOptions="searchOptions"
-          @search="handleSearch"
-          @reset="handleReset"
-          @change="handleChange"
-        ></Search>
-      </div>
+  <div class="SpacePage" v-loading="loading">
+    <el-row :gutter="0">
+      <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22" :offset="1">
+        <div class="showTable">
 
-      <div class="cmyyTable">
-        <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
-      </div>
+          <el-row :gutter="15">
+            <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4" class=""
+              v-for="(item, index) in table.tableData"
+              :key="index">
+              <div class="proItem">
+                <div class="imgWarp">
+                  <el-image
+                    class="proImg"
+                    :src="item.imgMainSrc"
+                    alt=""
+                    fit="contain"
+                    lazy
+                    :preview-src-list="table.srcList"
+                    ref="foo">
+                  </el-image>
+                </div>
+                <div class="infoWarp">
+                  <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                </div>
+              </div>
+            </el-col>
 
-      <div ref="cmyyPpagination" class="cmyyPpaginationWarp">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="table.pageNum"
-          :page-sizes="[20, 50, 100]"
-          :page-size="table.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="table.totalPage"
-        ></el-pagination>
-      </div>
-    </div>
+          </el-row>
+
+
+          <!-- 分页 -->
+          <el-pagination
+            class="wt_pagination"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="table.pageNum"
+            :page-sizes="[20, 50, 100]"
+            :page-size="table.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="table.totalPage"
+          ></el-pagination>
+        </div>
+      </el-col>
+
+    </el-row>
+
+
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Search from '@/components/Search'
-import Table from '@/components/Table'
 import Dialog from 'base/Dialog';
 import { deleteBlankSpace, formatSearch, calculateTableHeight, tableBtnPermissions, routerLinkPage, formatBrandTreeData } from 'common/js/dom';
 import { getDictsData, getSpaceList, delSpace, getBrandTree } from 'api/interface';
 
 export default {
   components: {
-    Search,
-    Table,
     'dialogModel': Dialog,
   },
   name: "SpaceList",
   data() {
     return {
-      isAddPermission: false,  // 新增按钮权限
-      isEditPermission: false,  // 编辑按钮权限
-      isDeletePermission: false,  // 删除按钮权限
-
-      loading: false,  // 页面load
-      addSaveLoading: false,   // 确定新增
-      editSaveLoading: false,  // 确定编辑
-      delSaveLoading: false,   // 确定删除
-
-      // 操作栏按钮
-      buttonList: [
-        {
-          name: 'add',
-          type: 'primary',
-          icon: 'el-icon-circle-plus-outline',
-          text: '新增',
-          class: '',
-          show: true,       //根据权限来显示
-          loading: false,
-          click: this.handleAdd,
-        },
-        {
-          name: 'delete',
-          type: '',
-          icon: 'el-icon-delete',
-          text: '删除',
-          class: '',
-          show: true,       //根据权限来显示
-          loading: false,
-          click: this.handleDelete,
-        },
-        {
-          name: 'export',
-          type: '',
-          icon: 'el-icon-download',
-          text: '导出',
-          class: '',
-          show: true,
-          loading: false,
-          click: this.handleExport,
-        }
-      ],
-
-      // 搜索栏
-      searchOptions: [
-        {
-          label: '空间名称',
-          field: 'name',
-          value: '',
-          type: 'input',
-        },
-        {
-          label: '空间编号',
-          field: 'number',
-          value: '',
-          type: 'input',
-        },
-        {
-          label: '创建时间',
-          field: 'createdTime',
-          value: '',
-          type: 'input',
-          hide: true,
-        },
-      ],
-      search: {},
-
-      // 表格
+      loading: true,
       table: {
-        title: [
+        srcList: [],
+        tableData: [
           {
-            label: '空间名称',
-            field: 'name',
-            width: 200,
+            id: 11,
+            name: "会议室",
+            number: "10002",
+            productList: null,
+            remark: "小型会议室-备注",
+            spaceDetailList: null,
+            spaceImgList: null,
+            imgMainSrc: '/src/common/images/image.png',
           },
           {
-            label: '空间编号',
-            field: 'number',
-            type: 'link',
-            click: this.handleDblclick,
+            id: 11,
+            name: "会议室",
+            number: "10002",
+            productList: null,
+            remark: "小型会议室-备注",
+            spaceDetailList: null,
+            spaceImgList: null,
+            imgMainSrc: '/src/common/images/image.png',
           },
           {
-            label: '备注',
-            field: 'remark',
+            id: 11,
+            name: "会议室",
+            number: "10002",
+            productList: null,
+            remark: "小型会议室-备注",
+            spaceDetailList: null,
+            spaceImgList: null,
+            imgMainSrc: '/src/common/images/image.png',
           },
           {
-            label: '创建人',
-            field: 'creator',
+            id: 11,
+            name: "会议室",
+            number: "10002",
+            productList: null,
+            remark: "小型会议室-备注",
+            spaceDetailList: null,
+            spaceImgList: null,
+            imgMainSrc: '/src/common/images/image.png',
           },
           {
-            label: '创建时间',
-            field: 'createdTime',
-            type: 'dateTime',
-            width: '130px',
-          },
-          {
-            label: '修改人',
-            field: 'modifier',
-          },
-          {
-            label: '修改时间',
-            field: 'modifiedTime',
-            type: 'dateTime',
-            width: '130px',
-          },
-          {
-            label: '操作',
-            field: '',
-            type: 'operat',
-            options: [
-              { name: '编辑', type: 'update', show: true, click: this.handleEdit },
-              { name: '查看', type: 'view', show: true, click: this.handleView },
-            ]
+            id: 11,
+            name: "会议室",
+            number: "10002",
+            productList: null,
+            remark: "小型会议室-备注",
+            spaceDetailList: null,
+            spaceImgList: null,
+            imgMainSrc: '/src/common/images/image.png',
           },
         ],
-        tableData: [],
         totalPage: 20,
         pageSize: 20,
         pageNum: 1,
         tableLoading: false,
-        tableHeight: '450px',
-        selectionChange: [],  // 多选行数据
       },
-
     }
   },
   created() {
-    this.search = formatSearch(this.searchOptions)
-    this._getDictsData()
-    this.getPermissions()
-    this._getSpaceList(this.table.pageNum, this.table.pageSize);
+
   },
   mounted() {
-
+    this._getSpaceList(this.table.pageNum, this.table.pageSize);
   },
   methods: {
-    // 数据字典
-    _getDictsData: function () {
-
-    },
-    // 页面权限
-    getPermissions: function () {
-      var permissionsBtnArr = localStorage.getItem("permissionsBtn");
-      this.buttonList.filter(item => item.name === 'add')[0].show = this.isAddPermission = permissionsBtnArr.includes("furniture:space:create")     // 新增功能
-      this.buttonList.filter(item => item.name === 'delete')[0].show = this.isAddPermission = permissionsBtnArr.includes("furniture:space:delete")     // 删除功能
-
-      // 表格按钮权限
-      tableBtnPermissions(this.table.title, 'update', permissionsBtnArr.includes("furniture:space:update"))   // 编辑功能
-    },
     // 获取列表数据
     _getSpaceList: function (pageNum, pageSize) {
-      var params = this.search
-      params.pageNum = pageNum,
-      params.pageSize = pageSize,
+      var params = {
+        name: '',
+        number: '',
+        createdTime: '',
+        pageNum: pageNum,
+        pageSize: pageSize,
+      }
 
       this.table.tableLoading = true
       getSpaceList(params).then(res => {
         this.table.tableLoading = false
+        this.loading = false
         if (res.status == 200) {
+          res.data.data.forEach((item, index) => {
+          //   if(!item.imgMain) {
+              // item.imgMainSrc = '/src/common/images/image.png'
+            // }
+            this.table.srcList.push(item.imgMainSrc)
+          })
+
           this.table.tableData = res.data.data
           this.table.totalPage = res.pageVO.total
 
-          // 需要计算table高度
-          calculateTableHeight(this)
-          window.onresize = () => {   // 缩放窗口实时计算
-            calculateTableHeight(this)
-          };
         }
       })
     },
-    // 查询
-    handleSearch(e) {
-      this.search = e
-      this._getSpaceList(1, this.table.pageSize);
-    },
-    // 查询-重置
-    handleReset(e) {
-      this.search = e
-      this._getSpaceList(1, this.table.pageSize);
-      this.$message('重置成功');
-    },
-    // 查询条件是否展开
-    handleChange(e) {
-      var _this = this
-      this.$nextTick(function () {
-        setTimeout(function () {
-          calculateTableHeight(_this)
-        }, 500)
-      })
-    },
-    // 导出
-    handleExport: function () {
-      let params = this.search
-      params.pageSize = ''
-      params.pageNum = ''
-      params.export = true
-      params.nameStr = ''
-      params.fieldStr = ''
-      this.table.title.forEach(function (item, index) {
-        if(item.type != 'operat') {
-          params.nameStr = params.nameStr + item.label + ','
-          params.fieldStr = params.fieldStr + item.field + ','
-        }
-      });
 
-      window.location.href = getSpaceList(params)
-    },
     // 每页显示条数
     handleSizeChange: function (val) {
       this.table.pageSize = val
@@ -263,96 +169,133 @@ export default {
       this.table.pageNum = val
       this._getSpaceList(this.table.pageNum, this.table.pageSize);
     },
-    // 双击行
-    handleDblclick(row) {
-      let query = {
-          id: row.id
-      }
-      routerLinkPage(this, 'SpaceDetail', query)
-    },
-    // 多选行数据
-    handleSelectionChange(e) {
-      this.table.selectionChange = e
-    },
-    show: function (type) {      //弹出弹出框   type(ref)
-      this.$refs[type].showModel();
-    },
-    hide: function (type) {      //隐藏弹出框
-      this.$refs[type].hideModel();
-    },
-    // 删除
-    handleDelete() {
-      this.buttonList.filter(item => item.name === 'delete')[0].loading = true
-      if(this.table.selectionChange.length == 0) {
-        this.$message({
-          type: 'warning',
-          message: '请先选择数据'
-        })
-        this.buttonList.filter(item => item.name === 'delete')[0].loading = false
-        return
-      }
 
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this._getDelSpace()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-        this.buttonList.filter(item => item.name === 'delete')[0].loading = false
-      });
-    },
-    // 删除确定
-    _getDelSpace() {
-      let ids = ''
-      this.table.selectionChange.forEach(function (item, index) {
-        ids += item.id + ','
-      })
-      ids = ids.substring(0, ids.length - 1)
 
-      delSpace(ids).then(res => {
-        if (res.status == 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-          this._getSpaceList(this.table.pageNum, this.table.pageSize)
-        } else if (res.status == 500) {
-          this.$message({
-            type: 'warning',
-            message: res.message
-          })
+    // 跳转详情页
+    routerLink(item) {
+      this.$router.push({
+        name: 'SpaceDetail',
+        query: {
+          id: item.id
         }
-        this.buttonList.filter(item => item.name === 'delete')[0].loading = false
       })
-    },
-    // 新增
-    handleAdd() {
-      let query = {}
-      routerLinkPage(this, 'SpaceAdd', query)
-    },
-    // 编辑
-    handleEdit(row) {
-      let query = {
-        id: row.id
-      }
-      routerLinkPage(this, 'SpaceAdd', query)
-    },
-    // 查看
-    handleView(row) {
-      let query = {
-        id: row.id
-      }
-      routerLinkPage(this, 'SpaceDetail', query)
     },
 
   }
 }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "./element-variables.scss";
+  .SpacePage {
+    .showTable{
+      background-color: #fff;
+      margin-top: 20px;
+      padding: 15px;
+      .proItem:hover {
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,0.5);
+      }
+      .proItem {
+        box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+        position: relative;
+        margin-bottom: 15px;
+        transition: 0.5s;
+        // imgWarp
+        .imgWarp {
+          position: relative;
+          .proImg {
+            display: block;
+            width: 100%;
+          }
+          .proImg:hover {
+            cursor: zoom-out;
+          }
+          .copy {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            cursor: pointer;
+          }
+        }
+
+        // infoWarp
+        .infoWarp {
+          padding: 12px;
+          font-size: 14px;
+          line-height: 30px;
+          color: $--color-text-regular;
+          .name {
+            font-size: 16px;
+            color: $--color-text-primary;
+            font-weight: bold;
+            line-height: 25px;
+            margin-bottom: 10px;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            cursor: pointer;
+          }
+          .name:hover {
+            color: $--color-primary;
+          }
+          .spec {
+            .specText {
+
+            }
+            .specTextMore {
+              cursor: pointer;
+            }
+          }
+          .price {
+            .priceText {
+              color: $--color-primary;
+              span {
+                font-size: 24px;
+                font-weight: bold;
+              }
+            }
+            .priceBtn {
+
+            }
+          }
+        }
+
+        // proLayer
+        .proLayer {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          background: rgba(0, 0, 0, 0.6);
+          color: #fff;
+          padding: 30px 25px;
+          font-size: 14px;
+          .title {
+            margin-bottom: 15px;
+          }
+          dl {
+            overflow: hidden;
+            margin-top: 8px;
+            dt {
+              float: left;
+            }
+            dd {
+              float: right;
+              color: $--color-primary;
+              span {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+  }
 </style>

@@ -333,3 +333,11 @@
   top: 120px;
   color: #fff;
 }
+
+
+/* 分页 */
+.wt_pagination{
+  padding: 25px 0;
+  text-align: center;
+  background-color: #fff;
+}
