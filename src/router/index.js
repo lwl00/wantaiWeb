@@ -100,6 +100,14 @@ export const asyncRouterMap = [
         children: [],
         hidden: true,
       },
+      {
+        path: '/cart',
+        name: 'Cart',
+        component: () => import('@/views/cart/index'),
+        meta: { title: '购物车', icon: '' },
+        children: [],
+        hidden: true,
+      },
 
       {
         path: '/product/discount',

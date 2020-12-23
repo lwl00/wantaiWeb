@@ -2,34 +2,46 @@
  * @ 李汶龙
  * @ 2018-09-26*/
 
-// 设置cookie
-export function setCookie(c_name, c_pwd, exdays) {
-  var exdate = new Date() // 获取时间
-  exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays) // 保存的天数
-  // 字符串拼接cookie
-  window.document.cookie =
-    'userName' + '=' + c_name + ';path=/;expires=' + exdate.toGMTString()
-  window.document.cookie =
-    'userPwd' + '=' + c_pwd + ';path=/;expires=' + exdate.toGMTString()
+//设置cookie
+export function setCookie(name,value,time){ 
+    var strsec = getsec(time); 
+    var exp = new Date();  
+    exp.setTime(exp.getTime() + strsec*1); 
+    document.cookie = name + "="+ escape (value) + ";path=/;expires=" + exp.toGMTString(); 
+}
+// setCookie("isShow","true","h24");
+export function getsec(str){ 
+   var str1=str.substring(1,str.length)*1; 
+   var str2=str.substring(0,1); 
+   if (str2=="s"){ 
+        return str1*1000; 
+   }
+   else if (str2=="h"){ 
+       return str1*60*60*1000; 
+   }
+   else if (str2=="d"){ 
+       return str1*24*60*60*1000; 
+   } 
 }
 
-// 读取cookie
-export function getCookie(data) {
-  if (document.cookie.length > 0) {
-    var arr = document.cookie.split('; ') // 这里显示的格式需要切割一下自己可输出看下
-    for (var i = 0; i < arr.length; i++) {
-      var arr2 = arr[i].split('=') // 再次切割
-      // 判断查找相对应的值
-      if (arr2[0] == data) {
-        return arr2[1] // 保存到保存数据的地方
-      }
+//获取cookie
+export function getCookie(name){ 
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg)){
+        return unescape(arr[2]);
+    }else{
+        return null; 
     }
-  }
-}
+} 
+// getCookie('isShow');
 
-// 清除cookie
-export function clearCookie() {
-  setCookie('', '', -1) // 修改2值都为空，天数为负1天就好了
+// 删除cookie
+export function delCookie(name) {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }
 
 // 搜索栏时间处理

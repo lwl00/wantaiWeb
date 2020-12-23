@@ -84,7 +84,7 @@
           </dl>
 
           <div>
-            <el-button type="primary">加入方案</el-button>
+            <el-button type="primary" @click="handleAddProject">加入方案</el-button>
             <el-button>开始配置方案</el-button>
           </div>
         </el-col>
@@ -175,6 +175,8 @@
         },
 
         choose: {
+          id: '',   // 规格id
+          productId: '',   // 产品id
           size: '',   // 规格
           unitPrice: '',   // 单价
           modelNumber: '',   // 型号
@@ -251,7 +253,41 @@
         }
       },
 
+// 加入方案  TODO
+      handleAddProject() {
+        let subtotal = this.choose.unitPrice * this.quantity  // 小计
+        let params = {
+          productId: this.choose.productId,
+          quantity: this.quantity,
+          specificationId: this.choose.id,
+          subtotal: subtotal
+        }
+        console.log(params)
+        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
 
+        currentProject.productSpecifiList.push(params)
+        currentProject.projectDetailList = currentProject.productSpecifiList
+        editProject(currentProject).then(res => {
+          if (res.status == 200) {
+            this.$message({
+              offset: '120',
+              message: '加入成功',
+              type: 'success'
+            })
+
+            // 选中新增的方案
+            setlocalStorage('isProjectNow', true)
+            setlocalStorage('currentProject',  JSON.stringify(res.data))
+          } else {
+            this.$message({
+              offset: '120',
+              type: 'error',
+              message: res.message
+            })
+          }
+          this.addSaveLoading = false
+        })
+      },
 
     }
   }

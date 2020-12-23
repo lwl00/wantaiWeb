@@ -18,7 +18,7 @@
       <el-button type="text" size="small" @click="handleEditCurrentProject">编辑客户信息</el-button>
       <el-button type="text" size="small" @click="handleExitCurrentProject">退出方案</el-button>
       <el-button type="text" size="small" @click="handleDeleteCurrentProject">删除方案</el-button>
-      <el-button type="primary" size="small">查看购物车</el-button>
+      <el-button type="primary" size="small" @click="routerLinkCart">查看购物车</el-button>
     </el-col>
   </el-row>
 </template>
@@ -62,6 +62,14 @@
       // 删除方案
       handleDeleteCurrentProject() {
         this.$emit('handleDeleteCurrentProject')
+      },
+
+      // 跳转购物车
+      routerLinkCart() {
+        this.$router.push({
+          name: 'Cart',
+          query: {}
+        })
       }
     },
     watch: {

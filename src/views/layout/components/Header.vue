@@ -157,7 +157,7 @@ import Table from '@/components/Table'
 import NavNow from './NavNow.vue'
 import Menu from './Menu.vue'
 import { mapGetters } from 'vuex';
-import { getCookie, setlocalStorage } from 'common/js/dom';
+import { getCookie, setCookie, delCookie, setlocalStorage } from 'common/js/dom';
 import { logout, getProjectList, getProject, addProject, editProject, delProject } from 'api/interface';
 
 export default {
@@ -311,10 +311,11 @@ export default {
       },
       // 双击行选择
       handleDblclick(row) {
+        setCookie('projectId', row.id, 'h12')
+
         console.log('双击行选择', row)
         this.isProjectNow = true
         setlocalStorage('isProjectNow', true)
-
         this.currentProject = row
         getProject(row.id).then(res => {
           this.loading = false
@@ -341,13 +342,20 @@ export default {
       // 退出方案(√)
       handleExitCurrentProject() {
         console.log('退出方案')
+        delCookie('projectId')
         this.isProjectNow = false
         setlocalStorage('isProjectNow', false)
         this.currentProject = ''
         setlocalStorage('currentProject', '')
-
+        console.log(this.$route.path)
+        
         // 传值给父组件
         this.$emit('isProjectNowFn', this.isProjectNow);
+        
+        // 购物车回到主页
+        if(this.$route.path == '/cart') {
+          this.$router.push('/');
+        }
       },
       // 新增方案(√)
       handleAddCurrentProject() {
@@ -377,10 +385,11 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          delCookie('projectId')
           this._getdelProject(this.currentProject.id)
         }).catch(() => {
           this.$message({
-        offset: '120',
+            offset: '120',
             type: 'info',
             message: '已取消删除'
           });

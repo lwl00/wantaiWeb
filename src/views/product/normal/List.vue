@@ -120,6 +120,19 @@
         </section>
 
 
+        <!-- 加入购物车 -->
+        <dialogModel
+          class="dialog-model"
+          ref="dialog-model-addCart"
+          :title="dialog.dialogTitle"
+          width="80%">
+          <DialogAddCart
+            :dialogProduct="dialogProduct"
+            @handleDialogYes="handleDialogYes"
+            @handleDialogNo="handleDialogNo">
+          </DialogAddCart>
+        </dialogModel>
+
       </el-col>
     </el-row>
   </div>
@@ -129,11 +142,15 @@
 
   import { setlocalStorage } from 'common/js/dom';
 	import Aside from '@/components/Aside'
+  import Dialog from 'base/Dialog';
+  import DialogAddCart from '@/components/DialogAddCart'
   import { getDictsData, getProductList, editProject } from 'api/interface';
 
 	export default {
 	  components: {
 	    Aside,
+      'dialogModel': Dialog,
+      DialogAddCart,
 	  },
 	  name: "ProductNormal",
 	  data() {
@@ -170,7 +187,13 @@
         },
 
 
-
+        // 加入购物车
+        dialog: {
+          loading: false,
+          dialogTitle: '加入购物车',    //编辑弹窗标题
+          dialogWidth: '500px',   //弹窗宽度
+        },
+        dialogProduct: {},
 
       }
 		},
@@ -274,38 +297,40 @@
       // 加入方案  TODO
       handleAddProject(item) {
         console.log(item)
-        let quantity = 1  // 默认数量为1
-        let subtotal = item.specificationList[0].unitPrice * quantity  // 小计
-        let params = {
-          productId: item.id,
-          quantity: quantity,
-          specificationId: item.specificationList[0].id,
-          subtotal: subtotal
-        }
-        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        currentProject.productSpecifiList.push(params)
-        currentProject.projectDetailList = currentProject.productSpecifiList
+        this.dialogProduct = item
+        this.show('dialog-model-addCart')
+        // let quantity = 1  // 默认数量为1
+        // let subtotal = item.specificationList[0].unitPrice * quantity  // 小计
+        // let params = {
+        //   productId: item.id,
+        //   quantity: quantity,
+        //   specificationId: item.specificationList[0].id,
+        //   subtotal: subtotal
+        // }
+        // let currentProject = JSON.parse(localStorage.getItem('currentProject'))
+        // currentProject.productSpecifiList.push(params)
+        // currentProject.projectDetailList = currentProject.productSpecifiList
 
-        editProject(currentProject).then(res => {
-          if (res.status == 200) {
-            this.$message({
-              offset: '120',
-              message: '加入成功',
-              type: 'success'
-            })
+        // editProject(currentProject).then(res => {
+        //   if (res.status == 200) {
+        //     this.$message({
+        //       offset: '120',
+        //       message: '加入成功',
+        //       type: 'success'
+        //     })
 
-            // 选中新增的方案
-            setlocalStorage('isProjectNow', true)
-            setlocalStorage('currentProject',  JSON.stringify(res.data))
-          } else {
-            this.$message({
-              offset: '120',
-              type: 'error',
-              message: res.message
-            })
-          }
-          this.addSaveLoading = false
-        })
+        //     // 选中新增的方案
+        //     setlocalStorage('isProjectNow', true)
+        //     setlocalStorage('currentProject',  JSON.stringify(res.data))
+        //   } else {
+        //     this.$message({
+        //       offset: '120',
+        //       type: 'error',
+        //       message: res.message
+        //     })
+        //   }
+        //   this.addSaveLoading = false
+        // })
       },
 
       // 跳转详情页
@@ -316,7 +341,32 @@
             id: item.id
           }
         })
-      }
+      },
+
+
+
+      /*
+       * 加入购物车
+       */
+      show: function (type) {      //弹出弹出框   type(ref)
+        this.$refs[type].showModel();
+      },
+      hide: function (type) {      //隐藏弹出框
+        this.$refs[type].hideModel();
+      },
+      // 展示商品弹窗，请求商品第一页数据
+      showProduct() {
+        this.show('dialog-model-addCart')
+      },
+      // 商品弹窗确定
+      handleDialogYes(e) {
+        this.hide('dialog-model-addCart')
+      },
+      // 商品弹窗取消
+      handleDialogNo(type) {
+        this.hide('dialog-model-addCart')
+      },
+
 
     }
 

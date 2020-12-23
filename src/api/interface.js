@@ -352,6 +352,13 @@ export function exportProjectDetail(params) {
   )
 }
 
+// 编辑
+export function addCartProject(params) {
+  const url = `${base}/project/projectId=${params.projectId}/productId=${params.productId}/specificationId=${params.specificationId}/quantity=${params.quantity}`
+
+  return ajaxGet(url)
+}
+
 
 /*
  * 空间管理
@@ -424,7 +431,7 @@ export function imagesUploadAction() {
 // 产品批量上传
 export function productImportAPPOINTAction() {
   const url = `${base}/upload/productImport`
-  
+
   return api + url
 }
 
