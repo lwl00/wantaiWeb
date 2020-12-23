@@ -201,7 +201,6 @@
             }
 
             // 选中新增的方案
-            setlocalStorage('isProjectNow', true)
             setlocalStorage('currentProject',  JSON.stringify(res.data.project))
           }
         })
@@ -246,7 +245,6 @@
             })
 
             // 选中新增的方案
-            setlocalStorage('isProjectNow', true)
             setlocalStorage('currentProject',  JSON.stringify(res.data))
           } else {
             this.$message({

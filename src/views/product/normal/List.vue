@@ -79,7 +79,7 @@
                     <div class="price clear">
                       <div class="priceText pull-left">￥<span>{{item.specificationList[0].unitPrice}}</span></div>
                       <div class="priceBtn pull-right">
-                        <el-button type="primary" size="mini" @click="handleAddProject(item)">加入方案</el-button>
+                        <el-button type="primary" size="mini" @click="handleAddProject(item)" v-if="projectIsNow">加入方案</el-button>
                       </div>
                     </div>
                   </div>
@@ -140,6 +140,7 @@
 
 <script>
 
+  import { mapGetters } from 'vuex';
   import { setlocalStorage } from 'common/js/dom';
 	import Aside from '@/components/Aside'
   import Dialog from 'base/Dialog';
@@ -147,12 +148,17 @@
   import { getDictsData, getProductList, editProject } from 'api/interface';
 
 	export default {
+	  name: "ProductNormal",
 	  components: {
 	    Aside,
       'dialogModel': Dialog,
       DialogAddCart,
 	  },
-	  name: "ProductNormal",
+    computed: {
+      ...mapGetters([
+        'projectIsNow',
+      ])
+    },
 	  data() {
 	    return {
         loading: true,
@@ -320,7 +326,6 @@
         //     })
 
         //     // 选中新增的方案
-        //     setlocalStorage('isProjectNow', true)
         //     setlocalStorage('currentProject',  JSON.stringify(res.data))
         //   } else {
         //     this.$message({
@@ -368,6 +373,11 @@
       },
 
 
+    },
+    watch: {
+      projectIsNow: function(val1, val2) {
+        console.log('projectIsNow', val1, val2)
+      }
     }
 
 	}

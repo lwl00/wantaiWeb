@@ -6,7 +6,8 @@ const app = {
       opened: !+Cookies.get('sidebarStatus'),
       withoutAnimation: false
     },
-    device: 'desktop'
+    device: 'desktop',
+    projectIsNow: Cookies.get('projectIsNow') == 'true' ? true : false,
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -25,6 +26,9 @@ const app = {
     },
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
+    },
+    TOGGLE_PROJECTISNOW: (state, projectIsNow) => {
+      state.projectIsNow = projectIsNow
     }
   },
   actions: {
@@ -36,6 +40,9 @@ const app = {
     },
     ToggleDevice({ commit }, device) {
       commit('TOGGLE_DEVICE', device)
+    },
+    ToggleProjectIsNow({ commit }, projectIsNow) {
+      commit('TOGGLE_PROJECTISNOW', projectIsNow)
     }
   }
 }

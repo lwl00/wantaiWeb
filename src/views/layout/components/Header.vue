@@ -13,7 +13,7 @@
 
         <div class="userinfo">
           <el-button-group style="margin-right: 20px;">
-            <el-button type="primary" size="small" @click="handleConfigProject" v-if="!isProjectNow">开始配置方案</el-button>
+            <el-button type="primary" size="small" @click="handleConfigProject" v-if="!projectIsNow">开始配置方案</el-button>
             <!-- <el-button type="primary" size="small" @click="handleConfigProject" >开始配置方案</el-button> -->
           </el-button-group>
 
@@ -51,7 +51,7 @@
       </div>
 
       <!-- 正在配置方案 -->
-      <div v-if="isProjectNow">
+      <div v-if="projectIsNow">
         <NavNow
           @handleExitCurrentProject="handleExitCurrentProject"
           @handleEditCurrentProject="handleEditCurrentProject"
@@ -91,7 +91,7 @@
       <dialogModel
         class="dialog-model"
         ref="dialog-model-projectFrom"
-        :title="isProjectNow ? '编辑客户信息' : '新增方案'"
+        :title="projectIsNow ? '编辑客户信息' : '新增方案'"
         :width="dialog.dialogWidth">
         <div class="dialog-model-content">
           <el-form :model="projectFrom" ref="projectFrom" :rules="rules" size="small">
@@ -173,6 +173,7 @@ export default {
         'name',
         'roles',
         'token',
+        'projectIsNow',
       ])
     },
     data() {
@@ -211,7 +212,6 @@ export default {
           dialogWidth: '500px',   //弹窗宽度
         },
 
-        isProjectNow: false,
         currentProject: {},
 
         addSaveLoading: false,
@@ -238,14 +238,14 @@ export default {
       }
     },
     created() {
-      // 读取localStorage中的isProjectNow，转换为Boolean
-      this.isProjectNow = localStorage.getItem('isProjectNow') == 'true' ? true : false
 
       // 当前方案
       if(localStorage.getItem('currentProject')) {
         this.currentProject = JSON.parse(localStorage.getItem('currentProject'))
       }
       console.log(this.currentProject)
+      console.log(this.projectIsNow)
+
     },
     methods: {
       //退出登录
@@ -311,23 +311,24 @@ export default {
       },
       // 双击行选择
       handleDblclick(row) {
-        setCookie('projectId', row.id, 'h12')
 
         console.log('双击行选择', row)
-        this.isProjectNow = true
-        setlocalStorage('isProjectNow', true)
         this.currentProject = row
         getProject(row.id).then(res => {
           this.loading = false
           if (res.status == 200) {
             setlocalStorage('currentProject', JSON.stringify(res.data.project))
+
+
+            setCookie('projectId', row.id, 'h12')
+            // 设置方案状态cookies/store
+            setCookie('projectIsNow', true, 'h12')
+            this.$store.dispatch('ToggleProjectIsNow', true)
           }
         })
         // setlocalStorage('currentProject', JSON.stringify(row))
         this.hide('dialog-model-project')
 
-        // 传值给父组件
-        this.$emit('isProjectNowFn', this.isProjectNow);
       },
       // 多选行数据(不用)
       handleSelectionChange(e) {
@@ -338,24 +339,24 @@ export default {
       handleConfigProject() {
         this.show('dialog-model-project')
         this._getProjectList(this.table.pageNum, this.table.pageSize);
+
       },
       // 退出方案(√)
       handleExitCurrentProject() {
         console.log('退出方案')
         delCookie('projectId')
-        this.isProjectNow = false
-        setlocalStorage('isProjectNow', false)
         this.currentProject = ''
         setlocalStorage('currentProject', '')
         console.log(this.$route.path)
-        
-        // 传值给父组件
-        this.$emit('isProjectNowFn', this.isProjectNow);
-        
+
         // 购物车回到主页
         if(this.$route.path == '/cart') {
           this.$router.push('/');
         }
+
+        // 设置方案状态cookies/store
+        setCookie('projectIsNow', false, 'h12')
+        this.$store.dispatch('ToggleProjectIsNow', false)
       },
       // 新增方案(√)
       handleAddCurrentProject() {
@@ -407,7 +408,7 @@ export default {
             this.handleExitCurrentProject()
           } else if (res.status == 500) {
             this.$message({
-        offset: '120',
+              offset: '120',
               type: 'warning',
               message: res.message
             })
@@ -423,7 +424,7 @@ export default {
             console.log('提交保存参数', params)
             // this.addSaveLoading = true
 
-            if(this.isProjectNow || this.projectFrom.id) {  // 编辑
+            if(this.projectIsNow || this.projectFrom.id) {  // 编辑
               // TODO
               params.projectDetailList = JSON.parse(localStorage.getItem('currentProject')).projectDetailList
               console.log(params)
@@ -495,6 +496,11 @@ export default {
       },
 
 
+    },
+    watch: {
+      projectIsNow: function(val1, val2) {
+        console.log(val1, val2)
+      }
     }
 }
 </script>

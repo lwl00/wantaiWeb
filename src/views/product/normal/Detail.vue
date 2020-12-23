@@ -84,8 +84,10 @@
           </dl>
 
           <div>
-            <el-button type="primary" @click="handleAddProject">加入方案</el-button>
-            <el-button>开始配置方案</el-button>
+            <el-button
+              :type="projectIsNow ? 'primary' :''"
+              :disabled="!projectIsNow"
+              @click="handleAddProject">加入方案</el-button>
           </div>
         </el-col>
       </el-row>
@@ -133,14 +135,21 @@
 
 <script>
 
+  import { mapGetters } from 'vuex';
   import { setlocalStorage } from 'common/js/dom';
   import { getProduct, editProject } from 'api/interface';
+  import Header from '../../layout/components/Header.vue'
 
   export default {
+    name: "ProductDetail",
     components: {
 
     },
-    name: "ProductDetail",
+    computed: {
+      ...mapGetters([
+        'projectIsNow',
+      ])
+    },
     data() {
       return {
         isDiscountPage: false,
@@ -276,7 +285,6 @@
             })
 
             // 选中新增的方案
-            setlocalStorage('isProjectNow', true)
             setlocalStorage('currentProject',  JSON.stringify(res.data))
           } else {
             this.$message({
@@ -288,6 +296,7 @@
           this.addSaveLoading = false
         })
       },
+
 
     }
   }

@@ -1,7 +1,8 @@
 <template>
 <div :class="classObj" class="app-wrapper">
-    <Header @isProjectNowFn="isProjectNowFn"/>
-    <div :style="{ height: isProjectNow ? '100px' : '60px' }"></div>
+    <Header/>
+    <div :style="{ height: projectIsNow ? '100px' : '60px' }"></div>
+
     <div class="main-container">
       <AppContainer/>
     </div>
@@ -23,22 +24,28 @@
 
 <script>
 // import { Header, Navbar, Sidebar, TagsView, AppMain } from './components'
-import { Header, AppContainer } from './components'
+import { Header, AppContainer, NavNow } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Layout',
   components: {
     Header,
-    AppContainer
+    AppContainer,
+    NavNow
   },
   mixins: [ResizeMixin],
+
   data() {
     return {
-      isProjectNow: null
+		
     }
   },
   computed: {
+    ...mapGetters([
+      'projectIsNow',
+    ]),
     sidebar() {
       return this.$store.state.app.sidebar
     },
@@ -55,22 +62,15 @@ export default {
     },
   },
   created() {
-    // 读取localStorage中的isProjectNow，转换为Boolean
-    this.isProjectNow = localStorage.getItem('isProjectNow') == 'true' ? true : false
+      console.log('this.projectIsNow========', this.projectIsNow)
   },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('CloseSideBar', { withoutAnimation: false })
     },
-    isProjectNowFn(val) {
-      this.isProjectNow = val;
-    }
   },
   watch: {
-    // isProjectNow(newVal, oldVal) {
-    //   console.log(newVal)
-    //   console.log(oldVal)
-    // }
+
   }
 }
 </script>
