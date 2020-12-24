@@ -305,37 +305,6 @@
         console.log(item)
         this.dialogProduct = item
         this.show('dialog-model-addCart')
-        // let quantity = 1  // 默认数量为1
-        // let subtotal = item.specificationList[0].unitPrice * quantity  // 小计
-        // let params = {
-        //   productId: item.id,
-        //   quantity: quantity,
-        //   specificationId: item.specificationList[0].id,
-        //   subtotal: subtotal
-        // }
-        // let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        // currentProject.productSpecifiList.push(params)
-        // currentProject.projectDetailList = currentProject.productSpecifiList
-
-        // editProject(currentProject).then(res => {
-        //   if (res.status == 200) {
-        //     this.$message({
-        //       offset: '120',
-        //       message: '加入成功',
-        //       type: 'success'
-        //     })
-
-        //     // 选中新增的方案
-        //     setlocalStorage('currentProject',  JSON.stringify(res.data))
-        //   } else {
-        //     this.$message({
-        //       offset: '120',
-        //       type: 'error',
-        //       message: res.message
-        //     })
-        //   }
-        //   this.addSaveLoading = false
-        // })
       },
 
       // 跳转详情页
@@ -358,10 +327,6 @@
       },
       hide: function (type) {      //隐藏弹出框
         this.$refs[type].hideModel();
-      },
-      // 展示商品弹窗，请求商品第一页数据
-      showProduct() {
-        this.show('dialog-model-addCart')
       },
       // 商品弹窗确定
       handleDialogYes(e) {
@@ -545,7 +510,7 @@
 
       }
 
-      
+
     }
   }
 </style>

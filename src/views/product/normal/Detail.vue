@@ -74,7 +74,7 @@
             <dt>数量</dt>：
             <dd>
               <el-input-number
-                v-model="quantity"
+                v-model="choose.quantity"
                 @change="handleChangeQuantity"
                 :step="1"
                 :min="1"
@@ -87,7 +87,7 @@
             <el-button
               :type="projectIsNow ? 'primary' :''"
               :disabled="!projectIsNow"
-              @click="handleAddProject">加入方案</el-button>
+              @click="handleDeatilAddProject">加入方案</el-button>
           </div>
         </el-col>
       </el-row>
@@ -99,10 +99,63 @@
             <div class="title contactProduct_title">
               关联产品
             </div>
-            <div class="container contactProduct_container">
+            <el-row :gutter="15"  class="container contactProduct_container">
+              <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4"
+                v-for="(item, index) in table.tableData"
+                :key="index">
+                <div class="proItem">
+                  <div class="imgWarp">
+                    <el-image
+                      class="proImg"
+                      :src="item.imgMainSrc"
+                      alt=""
+                      fit="contain"
+                      lazy
+                      :preview-src-list="table.srcList"
+                      ref="foo">
+                    </el-image>
+                    <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
+                  </div>
+                  <div class="infoWarp">
+                    <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                    <div class="crafts">{{item.categorysName}}</div>
+                    <div class="spec clear">
+                      <div class="specText pull-left">{{item.specificationList[0].size}}</div>
+                      <!-- <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div> -->
+                    </div>
+                    <div class="price clear">
+                      <div class="priceText pull-left">￥<span>{{item.specificationList[0].unitPrice}}</span></div>
+                      <div class="priceBtn pull-right">
+                        <el-button type="primary" size="mini" @click="handleAddProject(item)" v-if="projectIsNow">加入方案</el-button>
+                      </div>
+                    </div>
+                  </div>
 
-            </div>
+                  <!-- 蒙层 -->
+                  <!-- <div class="proLayer" v-show="item.isShowProLayer" @mouseleave="item.isShowProLayer = !item.isShowProLayer">
+                    <div class="" style="margin-bottom: 15px;">规格</div>
+                    <dl v-for="(specItem, specIndex) in item.specificationList">
+                      <dt>{{specItem.size}}</dt>
+                      <dd>￥<span>{{specItem.unitPrice}}</span></dd>
+                    </dl>
+                  </div> -->
+                </div>
+              </el-col>
+            </el-row>
           </div>
+
+          <!-- 加入购物车 -->
+          <dialogModel
+            class="dialog-model"
+            ref="dialog-model-addCart"
+            :title="dialog.dialogTitle"
+            width="80%">
+            <DialogAddCart
+              :dialogProduct="dialogProduct"
+              @handleDialogYes="handleDialogYes"
+              @handleDialogNo="handleDialogNo">
+            </DialogAddCart>
+          </dialogModel>
 
           <!-- 效果图 -->
           <div class="imgEffect" v-if="addForm.imgEffectList.length > 0">
@@ -136,13 +189,16 @@
 <script>
 
   import { mapGetters } from 'vuex';
-  import { setlocalStorage } from 'common/js/dom';
-  import { getProduct, editProject } from 'api/interface';
+  import Dialog from 'base/Dialog';
+  import DialogAddCart from '@/components/DialogAddCart'
+  import { getCookie, setlocalStorage } from 'common/js/dom';
+  import { getProduct, addCartProject } from 'api/interface';
 
   export default {
     name: "ProductDetail",
     components: {
-
+      'dialogModel': Dialog,
+      DialogAddCart,
     },
     computed: {
       ...mapGetters([
@@ -174,7 +230,6 @@
           contactsName: '',  // 关联产品名称
           contactNumbers: '',  // 关联产品编号
         },
-        quantity: 1,
 
         // options
         options: {
@@ -190,7 +245,8 @@
           modelNumber: '',   // 型号
           volume: '',   // 体积
           image: '',   // 图片名称
-          imageSrc: ''  // 图片路径
+          imageSrc: '',  // 图片路径
+          quantity: 1,       // 数量
         },
 
 
@@ -199,6 +255,25 @@
 
         // 效果图(放大查看)
         previewImgEffectList: [],
+
+
+        // 关联产品
+        table: {
+          srcList: [],
+          tableData: [],
+          totalPage: 20,
+          pageSize: 20,
+          pageNum: 1,
+          tableLoading: false,
+        },
+
+        // 加入购物车
+        dialog: {
+          loading: false,
+          dialogTitle: '加入购物车',    //编辑弹窗标题
+          dialogWidth: '500px',   //弹窗宽度
+        },
+        dialogProduct: {},
 
       }
     },
@@ -241,13 +316,25 @@
               }
             }
 
+            // 关联产品
+            if(res.data.product.contactProductList && res.data.product.contactProductList.length > 0) {
+              res.data.product.contactProductList.forEach((item, index) => {
+                item.isShowProLayer = false
+                if(!item.imgMain) {
+                  item.imgMainSrc = '/src/common/images/image.png'
+                }
+                this.table.srcList.push(item.imgMainSrc)
+              })
+            }
+            this.table.tableData = res.data.product.contactProductList
+
           }
         })
       },
       // 数量加减
       handleChangeQuantity(currentValue, oldValue) {
         console.log(currentValue, oldValue);
-        console.log(this.quantity);
+        console.log(this.choose.quantity);
       },
       // 选择规格
       handleChangeSpecRadio(e, item) {
@@ -257,25 +344,23 @@
       // 设置选中规格数据，展示其单价、型号、体积
       setChoose(obj) {
         for(var el in this.choose) {
-          this.choose[el] = obj[el]
+          if(obj[el]) {
+            this.choose[el] = obj[el]
+          }
         }
       },
 
-// 加入方案  TODO
-      handleAddProject() {
-        let subtotal = this.choose.unitPrice * this.quantity  // 小计
-        let params = {
+      // 加入方案
+      handleDeatilAddProject() {
+        var params = {
+          projectId: Number(getCookie('projectId')),
           productId: this.choose.productId,
-          quantity: this.quantity,
           specificationId: this.choose.id,
-          subtotal: subtotal
+          quantity: this.choose.quantity,
         }
-        console.log(params)
-        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
+        console.log('参数', params)
 
-        currentProject.productSpecifiList.push(params)
-        currentProject.projectDetailList = currentProject.productSpecifiList
-        editProject(currentProject).then(res => {
+        addCartProject(params).then(res => {
           if (res.status == 200) {
             this.$message({
               offset: '120',
@@ -293,6 +378,41 @@
             })
           }
           this.addSaveLoading = false
+        })
+      },
+
+      /*
+       * 关联产品加入购物车
+       */
+      show: function (type) {      //弹出弹出框   type(ref)
+        this.$refs[type].showModel();
+      },
+      hide: function (type) {      //隐藏弹出框
+        this.$refs[type].hideModel();
+      },
+      // 商品弹窗确定
+      handleDialogYes(e) {
+        this.hide('dialog-model-addCart')
+      },
+      // 商品弹窗取消
+      handleDialogNo(type) {
+        this.hide('dialog-model-addCart')
+      },
+
+      // 加入方案弹窗s
+      handleAddProject(item) {
+        console.log(item)
+        this.dialogProduct = item
+        this.show('dialog-model-addCart')
+      },
+      
+      // 跳转详情页
+      routerLink(item) {
+        this.$router.push({
+          name: 'ProductDetail',
+          query: {
+            id: item.id
+          }
         })
       },
 
@@ -359,7 +479,7 @@
     }
 
     .productOther {
-      margin-top: 40px;
+      margin-top: 20px;
       .title {
         font-size: 16px;
         color: #333;
@@ -384,16 +504,120 @@
 
     // 关联产品
     .contactProduct {
+      margin-top: 30px;
       .contactProduct_title {
 
       }
       .contactProduct_container {
+        .proItem:hover {
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.5);
+          }
+          .proItem {
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
+            position: relative;
+            margin-bottom: 15px;
+            transition: 0.5s;
+            // imgWarp
+            .imgWarp {
+              position: relative;
+              .proImg {
+                display: block;
+                width: 100%;
+              }
+              .proImg:hover {
+                cursor: zoom-out;
+              }
+              .copy {
+                position: absolute;
+                top: 0;
+                right: 10px;
+                cursor: pointer;
+              }
+            }
+
+            // infoWarp
+            .infoWarp {
+              padding: 12px;
+              font-size: 14px;
+              line-height: 30px;
+              color: $--color-text-regular;
+              .name {
+                font-size: 16px;
+                color: $--color-text-primary;
+                font-weight: bold;
+                line-height: 25px;
+                margin-bottom: 10px;
+                text-overflow: -o-ellipsis-lastline;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+                cursor: pointer;
+              }
+              .name:hover {
+                color: $--color-primary;
+              }
+              .spec {
+                .specText {
+
+                }
+                .specTextMore {
+                  cursor: pointer;
+                }
+              }
+              .price {
+                .priceText {
+                  color: $--color-primary;
+                  span {
+                    font-size: 24px;
+                    font-weight: bold;
+                  }
+                }
+                .priceBtn {
+
+                }
+              }
+            }
+
+            // proLayer
+            .proLayer {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              background: rgba(0, 0, 0, 0.6);
+              color: #fff;
+              padding: 30px 25px;
+              font-size: 14px;
+              .title {
+                margin-bottom: 15px;
+              }
+              dl {
+                overflow: hidden;
+                margin-top: 8px;
+                dt {
+                  float: left;
+                }
+                dd {
+                  float: right;
+                  color: $--color-primary;
+                  span {
+                    font-weight: bold;
+                  }
+                }
+              }
+            }
+          }
 
       }
     }
 
     // 效果图
     .imgEffect {
+      margin-top: 30px;
       .imgEffect_title {
 
       }
@@ -413,5 +637,16 @@
 <style>
   .infoItem .el-radio__input {
     display: none;
+  }
+
+  .productDetailPage .el-radio {
+    margin: 0 0 0 13px;
+    margin-bottom: 8px;
+  }
+  .productDetailPage .el-radio__inner {
+    opacity: 0;
+  }
+  .productDetailPage .el-radio__label {
+    padding: 0;
   }
 </style>

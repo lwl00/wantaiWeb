@@ -6,7 +6,7 @@
           label="产品名称"
           :label-width="formLabelWidth"
           size="small">
-          {{dialogProduct.name}} -- {{choose.modelNumber}}  --  {{choose.id}}  --
+          {{dialogProduct.name}}   {{choose.modelNumber}}
         </el-form-item>
         <el-form-item
           label="单价"
@@ -65,7 +65,7 @@
 
 <script>
 
-  import { getCookie } from 'common/js/dom';
+  import { getCookie, setlocalStorage  } from 'common/js/dom';
   import { addCartProject } from 'api/interface';
   export default {
     components: {
