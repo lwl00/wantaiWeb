@@ -1,31 +1,35 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container" v-loading="loading">
-      <div ref="searchToolbar" class="searchToolbar">
-        <Search
-          :buttonList="buttonList"
-          :searchOptions="searchOptions"
-          @search="handleSearch"
-          @reset="handleReset"
-          @change="handleChange"
-        ></Search>
+  <div class="AccountPage" v-loading="loading">
+    <section class="account_info">
+      <div class="title">
+        方案管理
       </div>
+    </section>
 
-      <div class="cmyyTable">
-        <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
-      </div>
+    <div ref="searchToolbar" class="searchToolbar">
+      <Search
+        :buttonList="buttonList"
+        :searchOptions="searchOptions"
+        @search="handleSearch"
+        @reset="handleReset"
+        @change="handleChange"
+      ></Search>
+    </div>
 
-      <div ref="cmyyPpagination" class="cmyyPpaginationWarp">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="table.pageNum"
-          :page-sizes="[20, 50, 100]"
-          :page-size="table.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="table.totalPage"
-        ></el-pagination>
-      </div>
+    <div class="cmyyTable">
+      <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
+    </div>
+
+    <div ref="cmyyPpagination" class="cmyyPpaginationWarp">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="table.pageNum"
+        :page-sizes="[20, 50, 100]"
+        :page-size="table.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="table.totalPage"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -336,6 +340,7 @@ export default {
       // this.buttonList.filter(item => item.name === 'export')[0].loading = true
       if(this.table.selectionChange.length == 0) {
         this.$message({
+          offset: '120',
           type: 'warning',
           message: '请先选择数据'
         })
@@ -343,6 +348,7 @@ export default {
         return
       }else if(this.table.selectionChange.length > 1) {
         this.$message({
+          offset: '120',
           type: 'warning',
           message: '只能选择导出一条数据'
         })
@@ -350,25 +356,12 @@ export default {
          return
       }
 
-      console.log(this.table.selectionChange)
-
       let params = {
-        // nameStr: ',商品名称,商品编号,数量,小计,品牌,系列,工艺,分类,,,',
-        // fieldStr: ',name,number,quantity,subtotal,brandName,seriesName,craftsName,categorysName,,',
-        nameStr: '序号,图片,名称,编号,规格,型号,数量,单位,单价,小计,材质说明',
-        fieldStr: 'indexes,imgMain,name,number,size,modelNumber,quantity,unit,unitPrice,subtotal,instructions',
-        fieldTail: 'amount,name,companyName,contact,phone,customerName',
+        nameStr: "产品图片,产品名称,型号,规格,数量,单位,单价,总价,材质说明,",
+        fieldStr: "imgMain,name,modelNumber,size,quantity,unit,unitPrice,subtotal,instructions,",
+        fieldTail: "amount,name,companyName,contact,phone,customerName",
         id: this.table.selectionChange[0].id,
       }
-
-
-       // Long id = 9L;
-       //                fieldStr = "indexes,imgMain,name,number,size,modelNumber,quantity,unit,unitPrice,subtotal,instructions";
-       //                nameStr = "序号,图片,名称,编号,规格,型号,数量,单位,单价,小计,材质说明";
-
-
-      console.log(params)
-
       window.location.href = exportProjectDetail(params)
     },
     // 每页显示条数
@@ -460,29 +453,7 @@ export default {
 }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "./element-variables.scss";
+  @import "./css.scss";
 </style>
-
-<!-- {
-  "amount": 27000,
-  "companyName": "创美老板办公室",
-  "contact": "购买方联系人",
-  "customerName": "万泰业务员",
-  "name": "创美老板办公方案",
-  "phone": "18924540017",
-  "projectDetailList": [
-    {
-      "productId": "143",
-      "quantity": 4,
-      "specificationId": "394",
-      "subtotal": 5000
-    },
-    {
-      "productId": "143",
-      "quantity": 1,
-      "specificationId": "396",
-      "subtotal": 7000
-    }
-  ],
-  "remark": "备注说明"
-} -->

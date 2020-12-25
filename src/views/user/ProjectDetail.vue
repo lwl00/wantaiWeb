@@ -1,73 +1,77 @@
 <template>
-  <div class="app-container">
-    <div class="filter-container" v-loading="loading">
-      <div class="add-page-button-warp">
-        <ButtonGroup :buttonList="buttonList"></ButtonGroup>
+  <div class="AccountPage" v-loading="loading">
+    <section class="account_info">
+      <div class="title">
+        方案详情
       </div>
-      <el-form :model="addForm" ref="addProductForm" :rules="rules" label-width="170px" class="" size="small">
-        <el-row :gutter="0" class="query">
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="方案名称" prop="name" :label-width="formLabelWidth">
-              <el-input v-model="addForm.name" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="方案编号" prop="number" :label-width="formLabelWidth">
-              <el-input v-model="addForm.number" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="客户名称" prop="customerName" :label-width="formLabelWidth">
-              <el-input v-model="addForm.customerName" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="公司名称" prop="companyName" :label-width="formLabelWidth">
-              <el-input v-model="addForm.companyName" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="联系人" prop="contact" :label-width="formLabelWidth">
-              <el-input v-model="addForm.contact" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="联系电话" prop="phone" :label-width="formLabelWidth">
-              <el-input v-model="addForm.phone" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="总金额" prop="amount" :label-width="formLabelWidth">
-              <el-input v-model="addForm.amount" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="创建人" prop="creator" :label-width="formLabelWidth">
-              <el-input v-model="addForm.creator" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="创建时间" prop="createdTime" :label-width="formLabelWidth">
-              <el-input v-model="addForm.createdTime" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="修改人" prop="modifier" :label-width="formLabelWidth">
-              <el-input v-model="addForm.modifier" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-            <el-form-item label="修改时间" prop="modifiedTime" :label-width="formLabelWidth">
-              <el-input v-model="addForm.modifiedTime" disabled></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    </section>
 
-      <div class="detailListTitle">方案明细</div>
-      <div class="cmyyTable">
-        <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
-      </div>
+    <div class="add-page-button-warp">
+      <ButtonGroup :buttonList="buttonList"></ButtonGroup>
+    </div>
+    <el-form :model="addForm" ref="addProductForm" :rules="rules" label-width="170px" class="" size="small">
+      <el-row :gutter="0" class="query">
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="方案名称" prop="name" :label-width="formLabelWidth">
+            <el-input v-model="addForm.name" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="方案编号" prop="number" :label-width="formLabelWidth">
+            <el-input v-model="addForm.number" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="客户名称" prop="customerName" :label-width="formLabelWidth">
+            <el-input v-model="addForm.customerName" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="公司名称" prop="companyName" :label-width="formLabelWidth">
+            <el-input v-model="addForm.companyName" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="联系人" prop="contact" :label-width="formLabelWidth">
+            <el-input v-model="addForm.contact" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="联系电话" prop="phone" :label-width="formLabelWidth">
+            <el-input v-model="addForm.phone" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="总金额" prop="amount" :label-width="formLabelWidth">
+            <el-input v-model="addForm.amount" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="创建人" prop="creator" :label-width="formLabelWidth">
+            <el-input v-model="addForm.creator" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="创建时间" prop="createdTime" :label-width="formLabelWidth">
+            <el-input v-model="addForm.createdTime" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="修改人" prop="modifier" :label-width="formLabelWidth">
+            <el-input v-model="addForm.modifier" disabled></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
+          <el-form-item label="修改时间" prop="modifiedTime" :label-width="formLabelWidth">
+            <el-input v-model="addForm.modifiedTime" disabled></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
+    <div class="detailListTitle">方案明细</div>
+    <div class="cmyyTable">
+      <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
     </div>
   </div>
 </template>
@@ -256,5 +260,8 @@ export default {
 }
 </script>
 
-<style>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "./element-variables.scss";
+  @import "./css.scss";
 </style>

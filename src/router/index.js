@@ -8,6 +8,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '../views/layout/Layout'
+import userLayout from '../views/user/Layout'
 
 /**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
@@ -39,37 +40,46 @@ export const constantRouterMap = [
   {
     path: '/user',
     component: Layout,
-    redirect: '/user/account',
+    redirect: '/user/index',
     name: 'User',
-    meta: { title: '设置', icon: 'example' },
+    meta: { title: '个人中心', icon: 'example' },
     children: [
+      {
+        path: '/user/index',
+        component: userLayout,
+        redirect: '/user/account',
+        name: 'Index',
+        component: () => import('@/views/user/Layout'),
+        meta: { title: '个人中心', icon: '' },
+        children: [
+          {
+            path: '/user/account',
+            name: 'Account',
+            component: () => import('@/views/user/Account'),
+            meta: { title: '个人中心', icon: '', defaultActive: '1' },
+          },
+          {
+            path: '/user/project/list',
+            name: 'ProjectList',
+            component: () => import('@/views/user/ProjectList'),
+            meta: { title: '方案管理', icon: '', defaultActive: '2' },
+          },
+          {
+            path: '/user/project/detail',
+            name: 'ProjectDetail',
+            component: () => import('@/views/user/ProjectDetail'),
+            meta: { title: '方案详情', icon: '', defaultActive: '3' },
+            hidden: true,
+          },
+          {
+            path: '/user/modifypassword',
+            name: 'ModifyPassword',
+            component: () => import('@/views/user/ModifyPassword'),
+            meta: { title: '修改密码', icon: '', defaultActive: '4' },
+          }
+        ],
+      },
 
-      {
-        path: '/user/account',
-        name: 'Account',
-        component: () => import('@/views/user/Account'),
-        meta: { title: '个人中心', icon: '' }
-      },
-      {
-        path: '/user/project/list',
-        name: 'ProjectList',
-        component: () => import('@/views/user/ProjectList'),
-        meta: { title: '方案管理', icon: '' }
-      },
-      {
-        path: '/user/project/detail',
-        name: 'ProjectDetail',
-        component: () => import('@/views/user/ProjectDetail'),
-        meta: { title: '方案详情', icon: '' },
-        children: [],
-        hidden: true,
-      },
-      {
-        path: '/user/modifypassword',
-        name: 'ModifyPassword',
-        component: () => import('@/views/user/ModifyPassword'),
-        meta: { title: '修改密码', icon: '' }
-      }
     ]
   },
   {

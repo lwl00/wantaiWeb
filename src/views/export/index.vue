@@ -362,7 +362,6 @@
           fieldStr : fieldStr,
           fieldTail: 'amount,name,companyName,contact,phone,customerName',  // 写死
         }
-
         window.location.href = exportProjectDetail(params)
       }
 

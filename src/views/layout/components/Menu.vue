@@ -38,7 +38,6 @@
       }
     },
     created() {
-      console.log(constantRouterMap)
       this.permission_routers_product = constantRouterMap.filter(item => item.name == 'Product')
     },
     methods: {
