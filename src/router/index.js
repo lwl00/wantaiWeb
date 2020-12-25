@@ -39,13 +39,33 @@ export const constantRouterMap = [
   {
     path: '/user',
     component: Layout,
-    redirect: '/user/modifypassword',
-    name: 'pointsManage',
+    redirect: '/user/account',
+    name: 'User',
     meta: { title: '设置', icon: 'example' },
-    hidden: true,
     children: [
+
       {
-        path: 'modifypassword',
+        path: '/user/account',
+        name: 'Account',
+        component: () => import('@/views/user/Account'),
+        meta: { title: '个人中心', icon: '' }
+      },
+      {
+        path: '/user/project/list',
+        name: 'ProjectList',
+        component: () => import('@/views/user/ProjectList'),
+        meta: { title: '方案管理', icon: '' }
+      },
+      {
+        path: '/user/project/detail',
+        name: 'ProjectDetail',
+        component: () => import('@/views/user/ProjectDetail'),
+        meta: { title: '方案详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
+      {
+        path: '/user/modifypassword',
         name: 'ModifyPassword',
         component: () => import('@/views/user/ModifyPassword'),
         meta: { title: '修改密码', icon: '' }
@@ -131,6 +151,30 @@ export const constantRouterMap = [
     ]
   },
 
+  // 方案管理
+  {
+    path: '/project',
+    component: Layout,
+    redirect: '/project/list',
+    name: 'Project',
+    meta: { title: '方案管理', icon: 'link'},
+    children: [
+      {
+        path: '/project/list',
+        name: 'ProjectList',
+        component: () => import('@/views/project/List'),
+        meta: { title: '方案管理', icon: '' }
+      },
+      {
+        path: '/project/detail',
+        name: 'ProjectDetail',
+        component: () => import('@/views/project/Detail'),
+        meta: { title: '方案详情', icon: '' },
+        hidden: true
+      },
+    ]
+  },
+
 
 ]
 
@@ -141,70 +185,70 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  {
-    path: '/product',
-    component: Layout,
-    redirect: '/product',
-    name: 'Product',
-    meta: { title: '产品', icon: '' },
-    children: [
-      {
-        path: '/product',
-        name: 'ProductNormal',
-        component: () => import('@/views/product/normal/List'),
-        meta: { title: '产品库', icon: '' },
-        children: [],
-      },
-      {
-        path: '/product/detail',
-        name: 'ProductDetail',
-        component: () => import('@/views/product/normal/Detail'),
-        meta: { title: '产品详情', icon: '' },
-        children: [],
-        hidden: true,
-      },
+  // {
+  //   path: '/product',
+  //   component: Layout,
+  //   redirect: '/product',
+  //   name: 'Product',
+  //   meta: { title: '产品', icon: '' },
+  //   children: [
+  //     {
+  //       path: '/product',
+  //       name: 'ProductNormal',
+  //       component: () => import('@/views/product/normal/List'),
+  //       meta: { title: '产品库', icon: '' },
+  //       children: [],
+  //     },
+  //     {
+  //       path: '/product/detail',
+  //       name: 'ProductDetail',
+  //       component: () => import('@/views/product/normal/Detail'),
+  //       meta: { title: '产品详情', icon: '' },
+  //       children: [],
+  //       hidden: true,
+  //     },
 
-      {
-        path: '/product/discount',
-        name: 'ProductDiscount',
-        component: () => import('@/views/product/discount/List'),
-        meta: { title: '折扣专区', icon: '' },
-        children: [],
-      },
+  //     {
+  //       path: '/product/discount',
+  //       name: 'ProductDiscount',
+  //       component: () => import('@/views/product/discount/List'),
+  //       meta: { title: '折扣专区', icon: '' },
+  //       children: [],
+  //     },
 
-      {
-        path: '/space',
-        name: 'SpaceList',
-        component: () => import('@/views/space/List'),
-        meta: { title: '空间搭配', icon: '' },
-        children: [],
-      },
-      {
-        path: '/space/detail',
-        name: 'SpaceDetail',
-        component: () => import('@/views/space/Detail'),
-        meta: { title: '空间详情', icon: '' },
-        children: [],
-        hidden: true,
-      },
-      {
-        path: '/cart',
-        name: 'Cart',
-        component: () => import('@/views/cart/index'),
-        meta: { title: '购物车', icon: '' },
-        children: [],
-        hidden: true,
-      },
-      {
-        path: '/export',
-        name: 'Export',
-        component: () => import('@/views/export/index'),
-        meta: { title: '导出方案', icon: '' },
-        children: [],
-        hidden: true,
-      },
-    ]
-  },
+  //     {
+  //       path: '/space',
+  //       name: 'SpaceList',
+  //       component: () => import('@/views/space/List'),
+  //       meta: { title: '空间搭配', icon: '' },
+  //       children: [],
+  //     },
+  //     {
+  //       path: '/space/detail',
+  //       name: 'SpaceDetail',
+  //       component: () => import('@/views/space/Detail'),
+  //       meta: { title: '空间详情', icon: '' },
+  //       children: [],
+  //       hidden: true,
+  //     },
+  //     {
+  //       path: '/cart',
+  //       name: 'Cart',
+  //       component: () => import('@/views/cart/index'),
+  //       meta: { title: '购物车', icon: '' },
+  //       children: [],
+  //       hidden: true,
+  //     },
+  //     {
+  //       path: '/export',
+  //       name: 'Export',
+  //       component: () => import('@/views/export/index'),
+  //       meta: { title: '导出方案', icon: '' },
+  //       children: [],
+  //       hidden: true,
+  //     },
+  //   ]
+  // },
 
 
   // // 客户管理

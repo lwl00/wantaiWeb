@@ -377,7 +377,8 @@
   .ExportPage {
     .aside {
       padding: 0 !important;
-      background-color: #fff;
+      background-color: #eee;
+      border: 1px solid #eee;
       .aside_section {
 
         .aside_section_title {
@@ -402,6 +403,7 @@
           font-size: 14px;
           color: $--color-text-primary;
           line-height: 24px;
+          background-color: #eee;
         }
       }
 
@@ -411,11 +413,11 @@
       .project_operat {
         text-align: right;
         margin-bottom: 15px;
-        background-color: #fff;
+        background-color: #eee;
         padding: 10px;
       }
       .project_name {
-        background-color: #fff;
+        background-color: #eee;
         font-size: 20px;
         color: $--color-text-primary;
         padding: 20px 0;
@@ -424,7 +426,7 @@
       }
 
       .project_info {
-        background-color: #fff;
+        background-color: #eee;
         line-height: 24px;
         padding: 15px;
         .amount {

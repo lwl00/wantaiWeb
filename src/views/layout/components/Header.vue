@@ -10,43 +10,29 @@
         <!-- 导航菜单 -->
         <Menu/>
 
-
         <div class="userinfo">
           <el-button-group style="margin-right: 20px;">
             <el-button type="primary" size="small" @click="handleConfigProject" v-if="!projectIsNow">开始配置方案</el-button>
-            <!-- <el-button type="primary" size="small" @click="handleConfigProject" >开始配置方案</el-button> -->
           </el-button-group>
 
           <el-dropdown style="line-height: normal;">
-            <span class="el-dropdown-link">
+            <span class="el-dropdown-link" style="cursor: pointer;">
               <i class="fa fa-user" aria-hidden="true"></i>
               {{name}}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <i class="fa fa-user" aria-hidden="true"></i> 个人中心
+                <router-link :to="{name:'Account'}"><i class="fa fa-user" aria-hidden="true"></i> 个人中心</router-link>
               </el-dropdown-item>
               <el-dropdown-item>
-                <i class="fa fa-sign-out" aria-hidden="true"></i> 历史方案
+                <router-link :to="{name:'ProjectList'}"><i class="fa fa-sign-out" aria-hidden="true"></i> 历史方案</router-link>
               </el-dropdown-item>
               <el-dropdown-item >
                 <div @click="_logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-
-
-           <!-- <span class>
-                <i class="fa fa-user" aria-hidden="true"></i>
-                {{name}}
-            </span>
-            <span class="userinfoItem" @click="modifypassword">
-                <i class="fa fa-cog" aria-hidden="true"></i> 修改密码
-            </span>
-            <span class="userinfoItem" @click="_logout">
-                <i class="fa fa-sign-out" aria-hidden="true"></i> 退出
-            </span> -->
         </div>
       </div>
 
@@ -509,7 +495,7 @@ export default {
 #headerWarp {
     position: fixed;
     top: 0px;
-    // z-index: 2999;
+    z-index: 2999;
     width: 100%;
     color: #fff;
     .header {

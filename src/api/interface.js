@@ -51,15 +51,6 @@ export function getInfo(username) {
     }
   })
 }
-// export function getInfo(username) {
-//   return request({
-//     url: api + '/system/users/username=' + username,
-//     method: 'get',
-//     headers: {
-//       Authorization: getToken()
-//     }
-//   })
-// }
 
 // 退出登录
 export function logout() {

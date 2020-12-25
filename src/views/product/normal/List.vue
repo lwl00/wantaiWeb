@@ -353,9 +353,14 @@
   @import "./element-variables.scss";
 
   .productPage {
+    // 品列分类
+    .aside {
+      padding: 10px;
+      background-color: #eee;
+    }
     // 搜素
     .searchWarp {
-      background-color: #fff;
+      background-color: #eee;
       padding: 5px 20px;
       .searchItem {
         display: flex;
@@ -380,7 +385,7 @@
       .showTitle{
         height: 40px;
         line-height: 40px;
-        background-color: #fff;
+        background-color: #eee;
         margin-top: 20px;
         padding: 0 15px;
         ul {
@@ -399,7 +404,7 @@
         }
       }
       .showTable{
-        background-color: #fff;
+        background-color: #eee;
         margin-top: 20px;
         padding: 15px;
         .proItem:hover {
@@ -410,6 +415,7 @@
           position: relative;
           margin-bottom: 15px;
           transition: 0.5s;
+          background-color: #fff;
           // imgWarp
           .imgWarp {
             position: relative;

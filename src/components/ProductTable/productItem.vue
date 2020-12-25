@@ -117,6 +117,7 @@ export default {
       position: relative;
       margin-bottom: 15px;
       transition: 0.5s;
+      background-color: #fff;
       // imgWarp
       .imgWarp {
         position: relative;

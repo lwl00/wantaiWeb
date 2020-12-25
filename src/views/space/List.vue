@@ -64,58 +64,7 @@ export default {
       loading: true,
       table: {
         srcList: [],
-        tableData: [
-          {
-            id: 11,
-            name: "会议室",
-            number: "10002",
-            productList: null,
-            remark: "小型会议室-备注",
-            spaceDetailList: null,
-            spaceImgList: null,
-            imgMainSrc: '/src/common/images/image.png',
-          },
-          {
-            id: 11,
-            name: "会议室",
-            number: "10002",
-            productList: null,
-            remark: "小型会议室-备注",
-            spaceDetailList: null,
-            spaceImgList: null,
-            imgMainSrc: '/src/common/images/image.png',
-          },
-          {
-            id: 11,
-            name: "会议室",
-            number: "10002",
-            productList: null,
-            remark: "小型会议室-备注",
-            spaceDetailList: null,
-            spaceImgList: null,
-            imgMainSrc: '/src/common/images/image.png',
-          },
-          {
-            id: 11,
-            name: "会议室",
-            number: "10002",
-            productList: null,
-            remark: "小型会议室-备注",
-            spaceDetailList: null,
-            spaceImgList: null,
-            imgMainSrc: '/src/common/images/image.png',
-          },
-          {
-            id: 11,
-            name: "会议室",
-            number: "10002",
-            productList: null,
-            remark: "小型会议室-备注",
-            spaceDetailList: null,
-            spaceImgList: null,
-            imgMainSrc: '/src/common/images/image.png',
-          },
-        ],
+        tableData: [],
         totalPage: 20,
         pageSize: 20,
         pageNum: 1,
@@ -146,9 +95,11 @@ export default {
         this.loading = false
         if (res.status == 200) {
           res.data.data.forEach((item, index) => {
-          //   if(!item.imgMain) {
-              // item.imgMainSrc = '/src/common/images/image.png'
-            // }
+            if(item.spaceImgList.length > 0) {
+              item.imgMainSrc = item.spaceImgList[0].imageSrc
+            }else {
+              item.imgMainSrc = '/src/common/images/image.png'
+            }
             this.table.srcList.push(item.imgMainSrc)
           })
 
@@ -200,6 +151,7 @@ export default {
         position: relative;
         margin-bottom: 15px;
         transition: 0.5s;
+        background-color: #fff;
         // imgWarp
         .imgWarp {
           position: relative;
