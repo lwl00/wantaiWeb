@@ -100,14 +100,6 @@ export const asyncRouterMap = [
         children: [],
         hidden: true,
       },
-      {
-        path: '/cart',
-        name: 'Cart',
-        component: () => import('@/views/cart/index'),
-        meta: { title: '购物车', icon: '' },
-        children: [],
-        hidden: true,
-      },
 
       {
         path: '/product/discount',
@@ -129,6 +121,22 @@ export const asyncRouterMap = [
         name: 'SpaceDetail',
         component: () => import('@/views/space/Detail'),
         meta: { title: '空间详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
+      {
+        path: '/cart',
+        name: 'Cart',
+        component: () => import('@/views/cart/index'),
+        meta: { title: '购物车', icon: '' },
+        children: [],
+        hidden: true,
+      },
+      {
+        path: '/export',
+        name: 'Export',
+        component: () => import('@/views/export/index'),
+        meta: { title: '导出方案', icon: '' },
         children: [],
         hidden: true,
       },

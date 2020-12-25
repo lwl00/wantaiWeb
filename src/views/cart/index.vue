@@ -1,5 +1,5 @@
 <template>
-  <div class="productDetailPage" v-loading="loading">
+  <div class="CartPage" v-loading="loading">
     <el-row :gutter="20" class="">
       <el-col :xs="22" :sm="9" :md="9" :lg="7" :xl="7" :offset="1" class="">
 
@@ -17,11 +17,11 @@
         <el-table
           size="mini"
           :data="tableData"
-          border
           style="width: 100%"
           highlight-current-row
           :row-class-name="rowClassName"
-          @selection-change="handleSelectionChange">
+          @selection-change="handleSelectionChange"
+          al>
           <el-table-column
             type="selection"
             width="40"
@@ -33,7 +33,9 @@
             :key="`col_${index}`"
             :prop="item.field"
             :label="item.label"
-            :min-width="item.width">
+            :min-width="item.width"
+            header-align="center"
+            :align="item.align">
             <template slot-scope="scope">
               <!-- 图片 -->
               <div class="image_warp" v-if="item.type == 'img'">
@@ -49,11 +51,11 @@
               </div>
               <!-- 信息 -->
               <div class="info_warp" v-if="item.type == 'info'">
-                <div class="name">{{scope.row.name}}</div>
+                <div class="name" @click="routerLink(scope.row)">{{scope.row.name}} -- {{currentProject.id}} -- {{scope.row.productId}} -- {{scope.row.specificationId}}</div>
                 <div class="info">
-                  {{scope.row.modelNumber}} <br>
-                  {{scope.row.size}} <br>
-                  {{scope.row.volume}} <br>
+                  型号：{{scope.row.modelNumber}} <br>
+                  规格：{{scope.row.size}} <br>
+                  体积：{{scope.row.volume}} <br>
                 </div>
               </div>
               <div class="price_warp" v-if="item.type == 'price'">
@@ -62,12 +64,13 @@
               <div class="quantity_warp" v-if="item.type == 'quantity'">
                 <el-input-number
                   v-model="scope.row.quantity"
+                  @change="handleChangeQuantity(scope.row, $event)"
                   :step="1"
                   :min="1"
                   label="产品数量"
                   step-strictly="true"
                   size="mini"></el-input-number>
-                  <span>{{scope.row.unitName}}</span>
+                  <span> {{scope.row.unitName}}</span>
               </div>
               <div class="subtotal_warp" v-if="item.type == 'subtotal'">
                 ￥{{scope.row.subtotal}}
@@ -93,10 +96,14 @@
     <!-- 顶部悬浮行 -->
     <el-row :gutter="0" class="footNav">
       <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22" :offset="1" class="">
+
+        <div class="delAll" @click="handleDeleteMultiple">
+          删除全部
+        </div>
         <div class="amount_warp">
           当前方案总额：<span>￥</span><b>{{currentProject.amount}}</b>
         </div>
-        <el-button type="primary">生成报价清单</el-button>
+        <el-button type="primary" @click="routerExportLink">生成报价清单</el-button>
       </el-col>
     </el-row>
 
@@ -109,7 +116,7 @@
 <script>
   import Sortable from 'sortablejs';
   import { setlocalStorage, getCookie, setCookie, delCookie, } from 'common/js/dom';
-  import { getProject, editProject } from 'api/interface';
+  import { getProject, editProject, addCartProject } from 'api/interface';
   export default {
     name: "Cart",
     components: {
@@ -133,6 +140,7 @@
             label: '产品信息',
             field: 'name',
             type: 'info',
+            width: '150',
           },
           {
             label: '单价',
@@ -143,6 +151,8 @@
             label: '数量',
             field: 'quantity',
             type: 'quantity',
+            width: '170',
+            align: 'center',
           },
           {
             label: '小计',
@@ -153,11 +163,14 @@
             label: '材质说明',
             field: 'instructions',
             type: 'instructions',
+            width: '300',
           },
           {
             label: '操作',
             field: 'operat',
             type: 'operat',
+            width: '80',
+            align: 'center',
           },
         ],
 
@@ -165,11 +178,6 @@
     },
     created() {
       // 当前方案
-      // if(localStorage.getItem('currentProject')) {
-      //   this.currentProject = JSON.parse(localStorage.getItem('currentProject'))
-      // }
-      // console.log(this.currentProject)
-      // this.tableData = this.currentProject.productSpecifiList
       if(getCookie('projectId')) {
         this.projectId = getCookie('projectId')
         this._getProject(this.projectId)
@@ -253,23 +261,25 @@
               message: res.message
             })
           }
-          this.addSaveLoading = false
         })
       },
 
 
       // 单个删除
       handleDeleteSingle(row) {
+        this.loading = true
         console.log('单个删除', row)
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        console.log(currentProject)
-
         let currentProductSpecifiList = currentProject.productSpecifiList
-        currentProductSpecifiList.splice(currentProductSpecifiList.findIndex(item => item.productId === row.productId), 1)
 
-
+        currentProductSpecifiList.forEach(function(item, index) {
+          if(item.productId === row.productId && item.specificationId === row.specificationId) {
+            currentProductSpecifiList.splice(index, 1)
+          }
+        })
         currentProject.projectDetailList = currentProductSpecifiList
-        console.log(currentProject)
+        console.log('保存参数', currentProject)
+
         editProject(currentProject).then(res => {
           if (res.status == 200) {
             this.$message({
@@ -285,7 +295,6 @@
               message: res.message
             })
           }
-          this.addSaveLoading = false
         })
       },
       // 选择
@@ -294,6 +303,7 @@
       },
       // 多个删除
       handleDeleteMultiple() {
+        this.loading = true
         console.log('多个删除')
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
         currentProject.projectDetailList = []
@@ -312,7 +322,58 @@
               message: res.message
             })
           }
-          this.addSaveLoading = false
+        })
+      },
+
+      // 数量加减
+      handleChangeQuantity(row, currentValue) {
+        this.loading = true
+        console.log(row, currentValue);
+        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
+        let currentProductSpecifiList = currentProject.productSpecifiList
+
+        currentProductSpecifiList.forEach(function(item, index) {
+          if(item.productId === row.productId && item.specificationId === row.specificationId) {
+            item.quantity = currentValue
+          }
+        })
+        currentProject.projectDetailList = currentProductSpecifiList
+        console.log('保存参数', currentProject)
+
+        editProject(currentProject).then(res => {
+          if (res.status == 200) {
+            this.$message({
+              offset: '120',
+              message: '更新成功',
+              type: 'success'
+            })
+            this._getProject(res.data.id)
+          } else {
+            this.$message({
+              offset: '120',
+              type: 'error',
+              message: res.message
+            })
+          }
+        })
+      },
+      // 跳转详情页
+      routerLink(item) {
+        console.log(item)
+        this.$router.push({
+          name: 'ProductDetail',
+          query: {
+            id: item.productId
+          }
+        })
+      },
+      // 跳转导出页
+      routerExportLink() {
+        this.$router.push({
+          name: 'Export',
+          query: {
+            id: this.projectId
+          }
         })
       },
 
@@ -326,12 +387,25 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "./element-variables.scss";
 
-  .cartItem {
+  .CartPage {
     .image_warp {
 
     }
     .info_warp {
-
+      .name {
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .name:hover {
+        color: $--color-primary;
+      }
+      .info {
+        font-size: 12px;
+        color: $--color-text-secondary;
+        line-height: 18px;
+        margin-top: 8px;
+      }
     }
     .price_warp {
 
@@ -359,6 +433,9 @@
     bottom: 0;
     left: 0;
     right: 0;
+    .delAll {
+      text-align: left;
+    }
     .amount_warp {
       display: inline-block;
       vertical-align: middle;
