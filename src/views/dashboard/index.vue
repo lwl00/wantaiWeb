@@ -1,7 +1,6 @@
 <template>
     <div class="dashboard-container">
-        <div class="dashboard-text">Name：{{ name }}</div>
-        <!-- <div class="dashboard-text">roles:<span v-for="role in roles" :key="role">{{ role }}</span></div> -->
+        <div class="dashboard-text">Name：{{customer.name}}</div>
     </div>
 </template>
 
@@ -13,9 +12,7 @@
         name: 'Dashboard',
         computed: {
             ...mapGetters([
-                'name',
-                'roles',
-                'device',
+                'customer',
             ])
         },
         components: {
@@ -27,8 +24,7 @@
             }
         },
         created() {
-			// console.log(mapGetters)
-			// console.log(this.device)
+
         },
         methods: {
 
@@ -39,7 +35,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
 .dashboard {
     &-container {
-		
+
     }
     &-text {
         font-size: 30px;

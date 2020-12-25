@@ -30,8 +30,8 @@
               <el-dropdown-item>
                 <i class="fa fa-sign-out" aria-hidden="true"></i> 历史方案
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="fa fa-sign-out" aria-hidden="true"></i> 退出
+              <el-dropdown-item >
+                <div @click="_logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -509,7 +509,7 @@ export default {
 #headerWarp {
     position: fixed;
     top: 0px;
-    z-index: 2999;
+    // z-index: 2999;
     width: 100%;
     color: #fff;
     .header {

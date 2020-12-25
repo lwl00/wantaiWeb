@@ -17,7 +17,7 @@
 <script>
   import { isExternal } from '@/utils'
   import { mapGetters } from 'vuex'
-
+  import { asyncRouterMap, constantRouterMap } from '@/router'
   export default {
     name: "Menu",    // 导航菜单
     components: {
@@ -26,7 +26,7 @@
     computed: {
     ...mapGetters([
       'permission_routers',
-      'permission_routers_product',
+      // 'permission_routers_product',
       'sidebar'
     ]),
 
@@ -34,12 +34,12 @@
     data() {
       return {
         activeIndex: '0_1',
+        permission_routers_product: [],
       }
     },
     created() {
-      // console.log(this.permission_routers)
-      // console.log(this.permission_routers_product)
-      // console.log(this.permission_routers_product[0].children)
+      console.log(constantRouterMap)
+      this.permission_routers_product = constantRouterMap.filter(item => item.name == 'Product')
     },
     methods: {
       //

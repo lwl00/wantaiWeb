@@ -66,7 +66,70 @@ export const constantRouterMap = [
       },
     ]
   },
+  {
+    path: '/product',
+    component: Layout,
+    redirect: '/product',
+    name: 'Product',
+    meta: { title: '产品', icon: '' },
+    children: [
+      {
+        path: '/product',
+        name: 'ProductNormal',
+        component: () => import('@/views/product/normal/List'),
+        meta: { title: '产品库', icon: '' },
+        children: [],
+      },
+      {
+        path: '/product/detail',
+        name: 'ProductDetail',
+        component: () => import('@/views/product/normal/Detail'),
+        meta: { title: '产品详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
 
+      {
+        path: '/product/discount',
+        name: 'ProductDiscount',
+        component: () => import('@/views/product/discount/List'),
+        meta: { title: '折扣专区', icon: '' },
+        children: [],
+      },
+
+      {
+        path: '/space',
+        name: 'SpaceList',
+        component: () => import('@/views/space/List'),
+        meta: { title: '空间搭配', icon: '' },
+        children: [],
+      },
+      {
+        path: '/space/detail',
+        name: 'SpaceDetail',
+        component: () => import('@/views/space/Detail'),
+        meta: { title: '空间详情', icon: '' },
+        children: [],
+        hidden: true,
+      },
+      {
+        path: '/cart',
+        name: 'Cart',
+        component: () => import('@/views/cart/index'),
+        meta: { title: '购物车', icon: '' },
+        children: [],
+        hidden: true,
+      },
+      {
+        path: '/export',
+        name: 'Export',
+        component: () => import('@/views/export/index'),
+        meta: { title: '导出方案', icon: '' },
+        children: [],
+        hidden: true,
+      },
+    ]
+  },
 
 
 ]

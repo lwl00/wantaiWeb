@@ -28,11 +28,12 @@ const system = '/system'
 
 /* 登录
  * 相关数据接口*/
-// 登录
+// 前台登录
 export function login(username, password) {
   return request({
-    url: api + '/ajaxLogin',
-    method: 'post',
+    // url: api + '/frontLogin?username=',
+    url: `${api}/frontLogin?username=${username}&password=${password}`,
+    method: 'get',
     data: {
       username,
       password
@@ -43,13 +44,22 @@ export function login(username, password) {
 // 获取登录用户信息
 export function getInfo(username) {
   return request({
-    url: api + '/system/users/username=' + username,
+    url: `${api}/${base}/customer/myAccount`,
     method: 'get',
     headers: {
       Authorization: getToken()
     }
   })
 }
+// export function getInfo(username) {
+//   return request({
+//     url: api + '/system/users/username=' + username,
+//     method: 'get',
+//     headers: {
+//       Authorization: getToken()
+//     }
+//   })
+// }
 
 // 退出登录
 export function logout() {

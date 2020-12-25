@@ -13,52 +13,25 @@ router.beforeEach((to, from, next) => {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
     } else {
-      if (store.getters.roles.length === 0) {
-        store
-          .dispatch('GetInfo')
-          .then(res => {
-            // 拉取用户信息
-            // note: 'permissionsMenuArr', 'permissionsBtnArr' must be a array! such as: ['editor','develop']
-            var permissionsMenuArr = [] // 菜单权限
-            var permissionsBtnArr = [] // 按钮权限
-            res.data.roles[0].permissions.forEach(item => {
-              if (item.resourceType == 'menu') {
-                permissionsMenuArr.push(item.code)
-              } else if (item.resourceType == 'button') {
-                permissionsBtnArr.push(item.code)
-              }
-            })
-            localStorage.setItem(
-              'permissionsMenu',
-              JSON.stringify(permissionsMenuArr)
-            )
-            localStorage.setItem(
-              'permissionsBtn',
-              JSON.stringify(permissionsBtnArr)
-            )
-            // console.log('菜单权限', permissionsMenuArr)
-            // console.log('按钮权限', permissionsBtnArr)
-            store
-              .dispatch('GenerateRoutes', { permissionsMenuArr })
-              .then(() => {
-                // 根据permissionsMenuArr权限生成可访问的路由表
-                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-                next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-              })
+      store
+        .dispatch('GetInfo')
+        .then(res => {
+          localStorage.setItem(
+            'customer',
+            JSON.stringify(res.data.customer)
+          )
+          next()
+        })
+        .catch(err => {
+          Message({
+            message: err,
+            type: 'error',
+            duration: 5 * 1000
           })
-          .catch(err => {
-            Message({
-              message: err,
-              type: 'error',
-              duration: 5 * 1000
-            })
-            store.dispatch('LogOut').then(() => {
-              location.reload() // 为了重新实例化vue-router对象 避免bug
-            })
+          store.dispatch('LogOut').then(() => {
+            location.reload() // 为了重新实例化vue-router对象 避免bug
           })
-      } else {
-        next()
-      }
+        })
     }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

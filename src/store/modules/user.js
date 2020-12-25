@@ -8,7 +8,8 @@ const user = {
             name: '',
             username: getCookiesUserName(),
             avatar: '',
-            roles: []
+            roles: [],
+            customer: {},
         },
 
     mutations: {
@@ -26,6 +27,9 @@ const user = {
         },
         SET_ROLES: (state, roles) => {
             state.roles = roles
+        },
+        SET_CUSTOMER: (state, customer) => {
+            state.customer = customer
         }
     },
 
@@ -54,13 +58,8 @@ const user = {
             return new Promise((resolve, reject) => {
                 getInfo(state.username).then(response => {
                     if(response.status == 200) {
-                        if (response.data.roles && response.data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-                            commit('SET_ROLES', response.data.roles)
-                        } else {
-                            reject('getInfo: roles must be a non-null array !')
-                        }
-                        commit('SET_NAME', response.data.name)
-                        // commit('SET_AVATAR', response.data.avatar)
+                        commit('SET_CUSTOMER', response.data.customer)
+                        commit('SET_NAME', response.data.customer.name)
                         resolve(response)
                     }
                 }).catch(error => {
