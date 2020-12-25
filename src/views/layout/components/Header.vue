@@ -491,7 +491,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+@import "./element-variables.scss";
 #headerWarp {
     position: fixed;
     top: 0px;
@@ -501,6 +502,7 @@ export default {
     .header {
       height: 60px;
       background: #332c2b;
+      border-bottom: 2px solid $--color-primary;
       .userinfo {
           text-align: right;
           padding-right: 35px;

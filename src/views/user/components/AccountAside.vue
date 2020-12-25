@@ -37,7 +37,7 @@
         console.log(key, keyPath);
       },
       // 跳转页面
-      routerLink(item, index) {
+      routerLink(item) {
         this.$router.push({
           name: item.name,
           query: {}

@@ -100,24 +100,12 @@ export default {
 }
 </script>
 <style type="text/css" media="screen">
-  .el-menu-item.is-active,
-  #app .sidebar-container .el-submenu .el-menu-item.is-active {
-    background-color: #ff6633 !important;
-    color: #fff;
-  }
-  
+ .el-menu-item.is-active,
+  #app .sidebar-container .el-submenu .el-menu-item.is-active,
   .el-submenu .el-submenu__title:hover,
   .el-menu-item:hover,
   #app .sidebar-container .el-submenu .el-menu-item:hover {
     color: #fff !important;
     background-color: #ff6633 !important;
-  }  
-
-  .is-opened > .el-submenu__title {
-    background-color: #59697b !important;
-  }
-  .el-menu-item,
-  .el-submenu__title {
-    font-size: 13px;
   }
 </style>
