@@ -51,7 +51,12 @@
               </div>
               <!-- 信息 -->
               <div class="info_warp" v-if="item.type == 'info'">
-                <div class="name" @click="routerLink(scope.row)">{{scope.row.name}} -- {{currentProject.id}} -- {{scope.row.productId}} -- {{scope.row.specificationId}}</div>
+                <div class="name">
+                  <span class="name_text" @click="routerLink(scope.row)">
+                    {{scope.row.name}}  -- {{scope.row.specificationId}}
+                  </span>
+                  <i class="icon_discount" v-if="scope.row.discount">折</i>
+                </div>
                 <div class="info">
                   型号：{{scope.row.modelNumber}} <br>
                   规格：{{scope.row.size}} <br>
@@ -87,7 +92,7 @@
 
 
         <div style="text-align: center;margin-top: 15px;">
-          <el-button type="primary" size="small"><i class="el-icon-plus"></i>添加产品</el-button>
+          <el-button type="primary" size="small" @click="routerProductLink"><i class="el-icon-plus"></i>添加产品</el-button>
         </div>
       </el-col>
     </el-row>
@@ -97,8 +102,9 @@
     <el-row :gutter="0" class="footNav">
       <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22" :offset="1" class="">
 
-        <div class="delAll" @click="handleDeleteMultiple">
-          删除全部
+        <div class="chooseAll_warp">
+          <el-checkbox v-model="chooseAll" @click="handleChooseAllSelection">全选</el-checkbox>
+          <el-button class="delAll" type="text" @click="handleDeleteMultiple">删除选中</el-button>
         </div>
         <div class="amount_warp">
           当前方案总额：<span>￥</span><b>{{currentProject.amount}}</b>
@@ -106,9 +112,6 @@
         <el-button type="primary" @click="routerExportLink">生成报价清单</el-button>
       </el-col>
     </el-row>
-
-
-
 
   </div>
 </template>
@@ -146,6 +149,7 @@
             label: '单价',
             field: 'unitPrice',
             type: 'price',
+            align: 'center',
           },
           {
             label: '数量',
@@ -158,6 +162,7 @@
             label: '小计',
             field: 'subtotal',
             type: 'subtotal',
+            align: 'center',
           },
           {
             label: '材质说明',
@@ -173,6 +178,10 @@
             align: 'center',
           },
         ],
+
+        selectionChange: [], // 选中多选行数据
+
+        chooseAll: false,
 
       }
     },
@@ -299,14 +308,46 @@
       },
       // 选择
       handleSelectionChange(e) {
+        this.selectionChange = e
+      },
+      // 底部全选
+      handleChooseAllSelection(e) {
         console.log(e)
+        // if (this.chooseAll) {
+        //   rows.forEach(row => {
+        //     this.$refs.multipleTable.toggleRowSelection(row);
+        //   });
+        // } else {
+        //   this.$refs.multipleTable.clearSelection();
+        // }
       },
       // 多个删除
       handleDeleteMultiple() {
-        this.loading = true
-        console.log('多个删除')
+        // this.loading = true
+        console.log('多个删除', this.selectionChange)
+        if(this.selectionChange.length == 0) {
+          this.$message({
+            offset: '120',
+            type: 'warning',
+            message: '请选择数据'
+          })
+          return false
+        }
+
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        currentProject.projectDetailList = []
+        let currentProductSpecifiList = currentProject.productSpecifiList
+
+        this.selectionChange.map(el => {
+          currentProductSpecifiList.forEach(function(item, index) {
+            if(item.productId === el.productId && item.specificationId === el.specificationId) {
+              currentProductSpecifiList.splice(index, 1)
+            }
+          })
+        })
+
+        currentProject.projectDetailList = currentProductSpecifiList
+        console.log('保存参数', currentProject)
+
         editProject(currentProject).then(res => {
           if (res.status == 200) {
             this.$message({
@@ -376,6 +417,13 @@
           }
         })
       },
+      // 跳转产品列表页
+      routerProductLink() {
+        this.$router.push({
+          name: 'ProductNormal',
+          query: {}
+        })
+      },
 
 
 
@@ -393,13 +441,28 @@
     }
     .info_warp {
       .name {
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
+        .name_text {
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+        }
+        .name_text:hover {
+          color: $--color-primary;
+        }
+        .icon_discount {
+          display: inline-block;
+          width: 18px;
+          height: 18px;
+          line-height: 18px;
+          text-align: center;
+          font-size: 12px;
+          color: #fff;
+          background-color: $--color-primary;
+          border-radius: 4px;
+          font-style: normal;
+        }
       }
-      .name:hover {
-        color: $--color-primary;
-      }
+
       .info {
         font-size: 12px;
         color: $--color-text-secondary;
@@ -433,8 +496,11 @@
     bottom: 0;
     left: 0;
     right: 0;
-    .delAll {
-      text-align: left;
+    .chooseAll_warp {
+      float: left;
+      .delAll {
+        margin-left: 20px;
+      }
     }
     .amount_warp {
       display: inline-block;

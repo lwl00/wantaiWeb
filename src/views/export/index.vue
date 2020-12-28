@@ -40,9 +40,9 @@
             公司/个人名片
           </div>
           <div class="aside_section_container">
-            <p>佛山市万泰家具有限公司</p>
-            <p>刘丽</p>
-            <p>15989954179</p>
+            <p>{{customer.company}}</p>
+            <p>{{customer.name}}</p>
+            <p>{{customer.phone}}</p>
           </div>
         </section>
 
@@ -100,9 +100,9 @@
               联系电话：{{currentProject.phone}} <br/>
             </div>
             <div class="supply">
-              供货方：采购方 <br/>
-              联系人：联系人 <br/>
-              联系电话：联系电话 <br/>
+              供货方：{{customer.company}} <br/>
+              联系人：{{customer.name}} <br/>
+              联系电话：{{customer.phone}} <br/>
             </div>
           </div>
         </div>
@@ -118,10 +118,16 @@
 <script>
   import Sortable from 'sortablejs';
   import { setlocalStorage, getCookie, setCookie, delCookie, convertCurrency } from 'common/js/dom';
+  import { mapGetters } from 'vuex';
   import { getProject, editProject, addCartProject, exportProjectDetail } from 'api/interface';
   const columns = [];
   export default {
     name: "Export",
+    computed: {
+      ...mapGetters([
+        'customer',
+      ])
+    },
     components: {
 
     },
@@ -253,6 +259,7 @@
         this.checkedColumns.push(item.label)
         columns.push(item.label)
       })
+      console.log(this.customer)
     },
     mounted() {
       // this.rowDrop()

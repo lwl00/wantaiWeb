@@ -12,7 +12,7 @@
       </div>
 
       <div class="cmyyTable">
-        <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange"></Table>
+        <Table :table="table" @dblclick="handleDblclick" @handleSelectionChange="handleSelectionChange" :isShowSelection="false"></Table>
       </div>
 
       <div ref="cmyyPpagination" class="cmyyPpaginationWarp">

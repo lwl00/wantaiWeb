@@ -43,10 +43,63 @@
             <div class="title contactProduct_title">
               包含产品
             </div>
-            <div class="container contactProduct_container">
+            <el-row :gutter="15"  class="container contactProduct_container">
+              <el-col :xs="12" :sm="12" :md="8" :lg="6" :xl="4"
+                v-for="(item, index) in table.tableData"
+                :key="index">
+                <div class="proItem">
+                  <div class="imgWarp">
+                    <el-image
+                      class="proImg"
+                      :src="item.imgMainSrc"
+                      alt=""
+                      fit="contain"
+                      lazy
+                      :preview-src-list="table.srcList"
+                      ref="foo">
+                    </el-image>
+                    <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
+                  </div>
+                  <div class="infoWarp">
+                    <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                    <div class="crafts">{{item.categorysName}}</div>
+                    <div class="spec clear">
+                      <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
+                      <!-- <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div> -->
+                    </div>
+                    <div class="price clear">
+                      <div class="priceText pull-left">￥<span>{{item.specificationList[0].unitPrice}}</span></div>
+                      <div class="priceBtn pull-right">
+                        <el-button type="primary" size="mini" @click="handleAddProject(item)" v-if="projectIsNow">加入方案</el-button>
+                      </div>
+                    </div>
+                  </div>
 
-            </div>
+                  <!-- 蒙层 -->
+                  <!-- <div class="proLayer" v-show="item.isShowProLayer" @mouseleave="item.isShowProLayer = !item.isShowProLayer">
+                    <div class="" style="margin-bottom: 15px;">规格</div>
+                    <dl v-for="(specItem, specIndex) in item.specificationList">
+                      <dt>{{specItem.size}}</dt>
+                      <dd>￥<span>{{specItem.unitPrice}}</span></dd>
+                    </dl>
+                  </div> -->
+                </div>
+              </el-col>
+            </el-row>
           </div>
+
+          <!-- 加入购物车 -->
+          <dialogModel
+            class="dialog-model"
+            ref="dialog-model-addCart"
+            :title="dialog.dialogTitle"
+            width="80%">
+            <DialogAddCart
+              :dialogProduct="dialogProduct"
+              @handleDialogYes="handleDialogYes"
+              @handleDialogNo="handleDialogNo">
+            </DialogAddCart>
+          </dialogModel>
 
         </el-col>
       </el-row>
@@ -57,13 +110,16 @@
 <script>
 
   import { mapGetters } from 'vuex';
+  import Dialog from 'base/Dialog';
+  import DialogAddCart from '@/components/DialogAddCart'
   import { setlocalStorage } from 'common/js/dom';
   import { getSpace, editProject } from 'api/interface';
 
   export default {
     name: "SpaceDetail",
     components: {
-
+      'dialogModel': Dialog,
+      DialogAddCart,
     },
     computed: {
       ...mapGetters([
@@ -103,6 +159,23 @@
         // 产品图
         imgSrcList: [],
 
+        // 关联产品
+        table: {
+          srcList: [],
+          tableData: [],
+          totalPage: 20,
+          pageSize: 20,
+          pageNum: 1,
+          tableLoading: false,
+        },
+
+        // 加入购物车
+        dialog: {
+          loading: false,
+          dialogTitle: '加入购物车',    //编辑弹窗标题
+          dialogWidth: '500px',   //弹窗宽度
+        },
+        dialogProduct: {},
 
       }
     },
@@ -130,6 +203,21 @@
             this.setChoose(res.data.space.spaceImgList[0])
             console.log(this.choose)
 
+
+
+            // 关联产品
+            if(res.data.space.productList && res.data.space.productList.length > 0) {
+              res.data.space.productList.forEach((item, index) => {
+                item.isShowProLayer = false
+                if(!item.imgMain) {
+                  item.imgMainSrc = '/src/common/images/image.png'
+                }
+                this.table.srcList.push(item.imgMainSrc)
+              })
+            }
+            this.table.tableData = res.data.space.productList
+
+
           }
         })
       },
@@ -141,38 +229,37 @@
         }
       },
 
-      // 加入方案  TODO
-      handleAddProject() {
-        let subtotal = this.choose.unitPrice * this.quantity  // 小计
-        let params = {
-          productId: this.choose.productId,
-          quantity: this.quantity,
-          specificationId: this.choose.id,
-          subtotal: subtotal
-        }
-        console.log(params)
-        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
 
-        currentProject.productSpecifiList.push(params)
-        currentProject.projectDetailList = currentProject.productSpecifiList
-        editProject(currentProject).then(res => {
-          if (res.status == 200) {
-            this.$message({
-              offset: '120',
-              message: '加入成功',
-              type: 'success'
-            })
-
-            // 选中新增的方案
-            setlocalStorage('currentProject',  JSON.stringify(res.data))
-          } else {
-            this.$message({
-              offset: '120',
-              type: 'error',
-              message: res.message
-            })
+      /*
+       * 关联产品加入购物车
+       */
+      show: function (type) {      //弹出弹出框   type(ref)
+        this.$refs[type].showModel();
+      },
+      hide: function (type) {      //隐藏弹出框
+        this.$refs[type].hideModel();
+      },
+      // 商品弹窗确定
+      handleDialogYes(e) {
+        this.hide('dialog-model-addCart')
+      },
+      // 商品弹窗取消
+      handleDialogNo(type) {
+        this.hide('dialog-model-addCart')
+      },
+      // 加入方案弹窗s
+      handleAddProject(item) {
+        console.log(item)
+        this.dialogProduct = item
+        this.show('dialog-model-addCart')
+      },
+      // 跳转详情页
+      routerLink(item) {
+        this.$router.push({
+          name: 'ProductDetail',
+          query: {
+            id: item.id
           }
-          this.addSaveLoading = false
         })
       },
 
@@ -184,6 +271,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "./element-variables.scss";
+  @import "@/common/css/product.scss";
   .productDetailPage {
     .productBase {
       padding-bottom: 40px;

@@ -41,7 +41,7 @@
     methods: {
       //
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+        // console.log(key, keyPath);
       },
 
       // 跳转页面
@@ -51,7 +51,7 @@
           query: {}
         })
       },
-    }
+    },
   }
 </script>
 

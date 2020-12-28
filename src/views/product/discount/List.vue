@@ -73,7 +73,7 @@
                     <div class="name" @click="routerLink(item)">{{item.name}}</div>
                     <div class="crafts">{{item.categorysName}}</div>
                     <div class="spec clear">
-                      <div class="specText pull-left">{{item.specificationList[0].size}}</div>
+                      <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
                       <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div>
                     </div>
                     <div class="price clear">
@@ -351,6 +351,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "./element-variables.scss";
+  @import "@/common/css/product.scss";
 
   .productPage {
     // 品列分类
@@ -407,109 +408,6 @@
         background-color: #eee;
         margin-top: 20px;
         padding: 15px;
-        .proItem:hover {
-          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.5);
-        }
-        .proItem {
-          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
-          position: relative;
-          margin-bottom: 15px;
-          transition: 0.5s;
-          background-color: #fff;
-          // imgWarp
-          .imgWarp {
-            position: relative;
-            .proImg {
-              display: block;
-              width: 100%;
-            }
-            .proImg:hover {
-              cursor: zoom-out;
-            }
-            .copy {
-              position: absolute;
-              top: 0;
-              right: 10px;
-              cursor: pointer;
-            }
-          }
-
-          // infoWarp
-          .infoWarp {
-            padding: 12px;
-            font-size: 14px;
-            line-height: 30px;
-            color: $--color-text-regular;
-            .name {
-              font-size: 16px;
-              color: $--color-text-primary;
-              font-weight: bold;
-              line-height: 25px;
-              margin-bottom: 10px;
-              text-overflow: -o-ellipsis-lastline;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              line-clamp: 2;
-              -webkit-box-orient: vertical;
-              cursor: pointer;
-            }
-            .name:hover {
-              color: $--color-primary;
-            }
-            .spec {
-              .specText {
-
-              }
-              .specTextMore {
-                cursor: pointer;
-              }
-            }
-            .price {
-              .priceText {
-                color: $--color-primary;
-                span {
-                  font-size: 24px;
-                  font-weight: bold;
-                }
-              }
-              .priceBtn {
-
-              }
-            }
-          }
-
-          // proLayer
-          .proLayer {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            padding: 30px 25px;
-            font-size: 14px;
-            .title {
-              margin-bottom: 15px;
-            }
-            dl {
-              overflow: hidden;
-              margin-top: 8px;
-              dt {
-                float: left;
-              }
-              dd {
-                float: right;
-                color: $--color-primary;
-                span {
-                  font-weight: bold;
-                }
-              }
-            }
-          }
-        }
       }
 
       .showList{
