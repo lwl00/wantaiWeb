@@ -353,9 +353,16 @@ export function exportProjectDetail(params) {
   )
 }
 
-// 编辑
+// 加入方案明细
 export function addCartProject(params) {
   const url = `${base}/project/projectId=${params.projectId}/productId=${params.productId}/specificationId=${params.specificationId}/quantity=${params.quantity}`
+
+  return ajaxGet(url)
+}
+
+// 删除方案明细
+export function delProjectDetail(ids) {
+  const url = `${base}/project/ids=${ids}/detailDelete`
 
   return ajaxGet(url)
 }

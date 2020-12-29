@@ -53,7 +53,7 @@
               <div class="info_warp" v-if="item.type == 'info'">
                 <div class="name">
                   <span class="name_text" @click="routerLink(scope.row)">
-                    {{scope.row.name}}  -- {{scope.row.specificationId}}
+                    {{scope.row.name}}
                   </span>
                   <i class="icon_discount" v-if="scope.row.discount">折</i>
                 </div>
@@ -90,7 +90,6 @@
           </el-table-column>
         </el-table>
 
-
         <div style="text-align: center;margin-top: 15px;">
           <el-button type="primary" size="small" @click="routerProductLink"><i class="el-icon-plus"></i>添加产品</el-button>
         </div>
@@ -103,7 +102,6 @@
       <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22" :offset="1" class="">
 
         <div class="chooseAll_warp">
-          <el-checkbox v-model="chooseAll" @click="handleChooseAllSelection">全选</el-checkbox>
           <el-button class="delAll" type="text" @click="handleDeleteMultiple">删除选中</el-button>
         </div>
         <div class="amount_warp">
@@ -119,7 +117,7 @@
 <script>
   import Sortable from 'sortablejs';
   import { setlocalStorage, getCookie, setCookie, delCookie, } from 'common/js/dom';
-  import { getProject, editProject, addCartProject } from 'api/interface';
+  import { getProject, editProject, delProjectDetail } from 'api/interface';
   export default {
     name: "Cart",
     components: {
@@ -276,55 +274,15 @@
 
       // 单个删除
       handleDeleteSingle(row) {
-        this.loading = true
-        console.log('单个删除', row)
-        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        let currentProductSpecifiList = currentProject.productSpecifiList
-
-        currentProductSpecifiList.forEach(function(item, index) {
-          if(item.productId === row.productId && item.specificationId === row.specificationId) {
-            currentProductSpecifiList.splice(index, 1)
-          }
-        })
-        currentProject.projectDetailList = currentProductSpecifiList
-        console.log('保存参数', currentProject)
-
-        editProject(currentProject).then(res => {
-          if (res.status == 200) {
-            this.$message({
-              offset: '120',
-              message: '删除成功',
-              type: 'success'
-            })
-            this._getProject(res.data.id)
-          } else {
-            this.$message({
-              offset: '120',
-              type: 'error',
-              message: res.message
-            })
-          }
-        })
+        let ids = row.projectDetailId
+        this._delProjectDetail(ids)
       },
       // 选择
       handleSelectionChange(e) {
         this.selectionChange = e
       },
-      // 底部全选
-      handleChooseAllSelection(e) {
-        console.log(e)
-        // if (this.chooseAll) {
-        //   rows.forEach(row => {
-        //     this.$refs.multipleTable.toggleRowSelection(row);
-        //   });
-        // } else {
-        //   this.$refs.multipleTable.clearSelection();
-        // }
-      },
       // 多个删除
       handleDeleteMultiple() {
-        // this.loading = true
-        console.log('多个删除', this.selectionChange)
         if(this.selectionChange.length == 0) {
           this.$message({
             offset: '120',
@@ -333,29 +291,23 @@
           })
           return false
         }
-
-        let currentProject = JSON.parse(localStorage.getItem('currentProject'))
-        let currentProductSpecifiList = currentProject.productSpecifiList
-
-        this.selectionChange.map(el => {
-          currentProductSpecifiList.forEach(function(item, index) {
-            if(item.productId === el.productId && item.specificationId === el.specificationId) {
-              currentProductSpecifiList.splice(index, 1)
-            }
-          })
+        let ids = ''
+        this.selectionChange.map(item => {
+          ids += item.projectDetailId+','
         })
-
-        currentProject.projectDetailList = currentProductSpecifiList
-        console.log('保存参数', currentProject)
-
-        editProject(currentProject).then(res => {
+        this._delProjectDetail(ids)
+      },
+      // 删除方法(单个/多个)
+      _delProjectDetail(ids) {
+        this.loading = true
+        delProjectDetail(ids).then(res => {
           if (res.status == 200) {
             this.$message({
               offset: '120',
               message: '删除成功',
               type: 'success'
             })
-            this._getProject(res.data.id)
+            this._getProject(this.projectId)
           } else {
             this.$message({
               offset: '120',
@@ -369,7 +321,6 @@
       // 数量加减
       handleChangeQuantity(row, currentValue) {
         this.loading = true
-        console.log(row, currentValue);
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
         let currentProductSpecifiList = currentProject.productSpecifiList
 

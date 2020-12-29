@@ -43,12 +43,12 @@
 
         <!-- 列表展示 -->
         <section class="showWarp">
-          <div class="showTitle">
+          <!-- <div class="showTitle">
             <ul>
               <li class="active"><i class="el-icon-s-grid"></i> 网格模式</li>
               <li><i class="el-icon-s-operation"></i> 列表模式</li>
             </ul>
-          </div>
+          </div> -->
 
           <!-- 网格模式 -->
           <div class="showTable" v-loading="table.tableLoading" v-if="table.tableData.length > 0">

@@ -413,7 +413,10 @@ export default {
             if(this.projectIsNow || this.projectFrom.id) {  // 编辑
               // TODO
               params.projectDetailList = JSON.parse(localStorage.getItem('currentProject')).projectDetailList
-              console.log(params)
+              console.log(typeof(params.projectDetailList))
+              if(typeof(params.projectDetailList) == 'object') {
+                params.projectDetailList = []
+              }
               editProject(params).then(res => {
                 if (res.status == 200) {
                   this.$message({

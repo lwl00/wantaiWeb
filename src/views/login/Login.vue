@@ -7,9 +7,9 @@
                 </div>
                 <div class="loginMain pull-right">
                     <h2>
-                        万泰产品管理系统后台
+                        万泰产品配置中心
                         <br />
-                        <span>Wantai management system background</span>
+                        <span>Wantai Product Configuration Center</span>
                     </h2>
                     <div class="formItem" style="padding-left: 55px;">
                         <span :class="isWarn ? 'warnWarp' : 'errorWarp'">{{errorMsg}}</span>
