@@ -6,9 +6,34 @@ import { getToken } from '@/utils/auth'
 import { httpUrl, api } from './config'
 // ==================后期,当前页面中的httpUrl将全部替换为api========2020.11.25======
 
+
+import { Message, MessageBox } from 'element-ui'
+import store from '../store'
+
+// response.data.status == 4001
+function isLogOut(data) {
+  let isLogOut = false
+
+  if(data.status == 4001) {
+    isLogOut = true
+    Message({
+      message: data.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
+    store.dispatch('LogOut').then(() => {
+      location.reload() // 为了重新实例化vue-router对象 避免bug
+    })
+  }else {
+    isLogOut = false
+  }
+  return isLogOut
+}
+
+
 // axios Post方式--参数为json时，使用
 export function ajaxPostnotUrl(url, data) {
-  var url = api + url
+  var url = httpUrl + url
   return axios({
     method: 'post',
     url,
@@ -19,6 +44,7 @@ export function ajaxPostnotUrl(url, data) {
     }
   })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {
@@ -28,7 +54,7 @@ export function ajaxPostnotUrl(url, data) {
 
 // axios Put方式--参数为json时，使用
 export function ajaxPutnotUrl(url, data) {
-  var url = api + url
+  var url = httpUrl + url
   return axios({
     method: 'put',
     url,
@@ -39,6 +65,7 @@ export function ajaxPutnotUrl(url, data) {
     }
   })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {
@@ -48,7 +75,7 @@ export function ajaxPutnotUrl(url, data) {
 
 // axios Post方式--拼接参数时，使用
 export function ajaxPost(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios({
     method: 'post',
     url,
@@ -58,6 +85,7 @@ export function ajaxPost(url) {
     }
   })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {
@@ -76,6 +104,7 @@ export function ajaxGet(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {
@@ -85,7 +114,7 @@ export function ajaxGet(url) {
 
 // axios ajaxGetAllDictsData
 export function ajaxGetAllDictsData(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios
     .get(url, {
       headers: {
@@ -94,6 +123,7 @@ export function ajaxGetAllDictsData(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       if (response.status == 200) {
         var allSite = {
           createdTime: null,
@@ -118,7 +148,7 @@ export function ajaxGetAllDictsData(url) {
 
 // axios ajaxGetAllDictsRoleData(角色专用)
 export function ajaxGetAllDictsRoleData(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios
     .get(url, {
       headers: {
@@ -127,6 +157,7 @@ export function ajaxGetAllDictsRoleData(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       if (response.status == 200) {
         var allSite = {
           createdTime: null,
@@ -152,7 +183,7 @@ export function ajaxGetAllDictsRoleData(url) {
 }
 // axios ajaxGetAllGiftClass(礼品分类专用)
 export function ajaxGetAllGiftClass(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios
     .get(url, {
       headers: {
@@ -161,6 +192,7 @@ export function ajaxGetAllGiftClass(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       if (response.status == 200) {
         var allSite = {
           createdTime: null,
@@ -183,7 +215,7 @@ export function ajaxGetAllGiftClass(url) {
 
 // axios ajaxGetAllGiftType(礼品类型专用)
 export function ajaxGetAllGiftType(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios
     .get(url, {
       headers: {
@@ -192,6 +224,7 @@ export function ajaxGetAllGiftType(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       if (response.status == 200) {
         var allSite = {
           createdTime: null,
@@ -212,7 +245,7 @@ export function ajaxGetAllGiftType(url) {
 
 // axios Put
 export function ajaxPut(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios({
     method: 'put',
     url,
@@ -222,6 +255,7 @@ export function ajaxPut(url) {
     }
   })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {
@@ -231,7 +265,7 @@ export function ajaxPut(url) {
 
 // axios Delete
 export function ajaxDelete(url) {
-  var url = api + url
+  var url = httpUrl + url
   return axios
     .delete(url, {
       headers: {
@@ -240,6 +274,7 @@ export function ajaxDelete(url) {
       }
     })
     .then(function(response) {
+      isLogOut(response.data)
       return Promise.resolve(response.data)
     })
     .catch(function(error) {

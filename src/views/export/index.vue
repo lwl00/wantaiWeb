@@ -369,6 +369,7 @@
           fieldStr : fieldStr,
           fieldTail: 'amount,name,companyName,contact,phone,customerName',  // 写死
         }
+      console.log(exportProjectDetail(params))
         window.location.href = exportProjectDetail(params)
       }
 

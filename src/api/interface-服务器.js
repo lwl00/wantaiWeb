@@ -20,15 +20,20 @@ import { httpUrl, api } from './config'
 const base = '/base'
 const system = '/system'
 
-// ==================后期,当前页面中(主要指导出功能)的httpUrl将全部替换为api========2020.11.25======buttonList
+// ========2020.11.25======
+// 开发阶段, [导出,导入]  api换为httpUrl      // 本地开发--李汶龙
+// 服务器阶段, [导出,导入]  httpUrl换为api    // 服务器
+
+
 
 /* 登录
  * 相关数据接口*/
-// 登录
+// 前台登录
 export function login(username, password) {
   return request({
-    url: api + '/ajaxLogin',
-    method: 'post',
+    // url: api + '/frontLogin?username=',
+    url: `${httpUrl}/frontLogin?username=${username}&password=${password}`,
+    method: 'get',
     data: {
       username,
       password
@@ -39,7 +44,7 @@ export function login(username, password) {
 // 获取登录用户信息
 export function getInfo(username) {
   return request({
-    url: api + '/system/users/username=' + username,
+    url: `${httpUrl}${base}/customer/myAccount`,
     method: 'get',
     headers: {
       Authorization: getToken()
@@ -130,7 +135,7 @@ export function getCustomerList(params) {
   if (params.export) {
     // 导出表格数据(跨域添加 /api)
     return (
-      httpUrl +
+      api +
       url +
       '?export=' +
       params.export +
@@ -241,7 +246,7 @@ export function getProductList(params) {
   if (params.export) {
     // 导出表格数据(跨域添加 /api)
     return (
-      httpUrl +
+      api +
       url +
       '?export=' +
       params.export +
@@ -293,7 +298,7 @@ export function getProjectList(params) {
   if (params.export) {
     // 导出表格数据(跨域添加 /api)
     return (
-      httpUrl +
+      api +
       url +
       '?export=' +
       params.export +
@@ -336,7 +341,7 @@ export function exportProjectDetail(params) {
   let url = `${base}/project/id=${params.id}/export`
 
   return (
-    api +
+    httpUrl +
     url +
     '?fieldTail=' +
     params.fieldTail +
@@ -347,6 +352,21 @@ export function exportProjectDetail(params) {
     ''
   )
 }
+
+// 加入方案明细
+export function addCartProject(params) {
+  const url = `${base}/project/projectId=${params.projectId}/productId=${params.productId}/specificationId=${params.specificationId}/quantity=${params.quantity}`
+
+  return ajaxGet(url)
+}
+
+// 删除方案明细
+export function delProjectDetail(ids) {
+  const url = `${base}/project/ids=${ids}/detailDelete`
+
+  return ajaxGet(url)
+}
+
 
 /*
  * 空间管理
@@ -359,7 +379,7 @@ export function getSpaceList(params) {
   if (params.export) {
     // 导出表格数据(跨域添加 /api)
     return (
-      httpUrl +
+      api +
       url +
       '?export=' +
       params.export +
@@ -398,7 +418,7 @@ export function getSpace(id) {
   return ajaxGet(url)
 }
 
-
+console.log(api)
 
 /*
  * 图片上传
@@ -408,19 +428,19 @@ export function getSpace(id) {
 export function imageUploadAction() {
   const url = `${base}/upload/uploadImage`
 
-  return httpUrl + url
+  return api + url
 }
 // 多图
 export function imagesUploadAction() {
-  const url = `/${base}/upload/uploadImages`
+  const url = `${base}/upload/uploadImages`
 
-  return httpUrl + url
+  return api + url
 }
 // 产品批量上传
 export function productImportAPPOINTAction() {
-  const url = httpUrl + `/${base}/upload/productImport`
+  const url = `${base}/upload/productImport`
 
-  return url
+  return api + url
 }
 
 

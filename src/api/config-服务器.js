@@ -11,28 +11,22 @@ const VERSION = process.env.VERSION
 switch (VERSION) {
   case 'dev':
     // npm run dev
-    // httpUrl = 'https://jfapitest.cmyynet.com'
-    // api = '/api'
-    // ========2020.11.25====
-    httpUrl = 'http://localhost:8086'
+    // httpUrl = 'http://localhost:8086'  // 本地idea起服务
+    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = '/api'
     break
-  case 'pre': // 预部署环境,同域名下不用跨域https://jifenpre.cmyynet.com
-    // httpUrl = ''
-    httpUrl = 'http://localhost:8086'
+  case 'pre': // 预部署环境,同域名下不用跨域http://e.wantaix.com:8086
+    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = ''
     break
-  case 'prod': // 正式环境,同域名下不用跨域https://jifen.cmyynet.com
-    // httpUrl = ''
-    httpUrl = 'http://localhost:8086'
+  case 'prod': // 正式环境,同域名下不用跨域http://e.wantaix.com:8086
+    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = ''
     break
   default:
     // npm run dev
-    // httpUrl = 'https://jfapitest.cmyynet.com'
-    // api = '/api'
-    // ========2020.11.25====
-    httpUrl = 'http://localhost:8086'
+    // httpUrl = 'http://localhost:8086'  // 本地idea起服务
+    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = '/api'
 }
 

@@ -11,22 +11,22 @@ const VERSION = process.env.VERSION
 switch (VERSION) {
   case 'dev':
     // npm run dev
-    // httpUrl = 'http://localhost:8086'  // 本地idea起服务
-    httpUrl = 'http://e.wantaix.com:8086'  // 线上API
+    httpUrl = 'http://localhost:8086'  // 本地idea起服务
+    // httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = '/api'
     break
   case 'pre': // 预部署环境,同域名下不用跨域http://e.wantaix.com:8086
-    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
+    httpUrl = ''  // 线上API
     api = ''
     break
   case 'prod': // 正式环境,同域名下不用跨域http://e.wantaix.com:8086
-    httpUrl = 'http://e.wantaix.com:8081'  // 线上API
+    httpUrl = ''  // 线上API
     api = ''
     break
   default:
     // npm run dev
-    // httpUrl = 'http://localhost:8086'  // 本地idea起服务
-    httpUrl = 'http://e.wantaix.com:8086'  // 线上API
+    httpUrl = 'http://localhost:8086'  // 本地idea起服务
+    // httpUrl = 'http://e.wantaix.com:8081'  // 线上API
     api = '/api'
 }
 
