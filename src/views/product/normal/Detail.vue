@@ -305,15 +305,12 @@
 
             // 效果图
             if(res.data.product.imgEffectList && res.data.product.imgEffectList.length > 0) {
-              for(var i=0; i<=3; i++) {
-
-                res.data.product.imgEffectList.forEach((item, index) => {
-                  if(item.image) {
-                    item.imageSrc = 'http://e.wantaix.com:8081/images/202012071836036419.jpg'
-                    this.previewImgEffectList.push(item.imageSrc)
-                  }
-                })
-              }
+              res.data.product.imgEffectList.forEach((item, index) => {
+                if(!item.image) {
+                  item.imageSrc = '/src/common/images/image.png'
+                }
+                this.previewImgEffectList.push(item.imageSrc)
+              })
             }
 
             // 关联产品

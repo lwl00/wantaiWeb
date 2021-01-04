@@ -44,8 +44,7 @@ export function login(username, password) {
 // 获取登录用户信息
 export function getInfo(username) {
   return request({
-    // url: `${api}/${base}/customer/myAccount`,
-    url: 'http://s.wantaix.com:8082/base/customer/myAccount',
+    url: `${api}${base}/customer/myAccount`,
     method: 'get',
     headers: {
       Authorization: getToken()
