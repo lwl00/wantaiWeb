@@ -52,7 +52,7 @@
               <div class="info_warp" v-if="item.type == 'info'">
                 <div class="name">
                   <span class="name_text" @click="routerLink(scope.row)">
-                    {{scope.row.name}}  ---  {{scope.row.indexes}}  ---  {{scope.row.projectDetailId}}
+                    {{scope.row.name}}
                   </span>
                   <i class="icon_discount" v-if="scope.row.discount">折</i>
                 </div>
@@ -409,12 +409,15 @@
           font-size: 14px;
           font-weight: bold;
           cursor: pointer;
+          display: inline-block;
+          vertical-align: middle;
         }
         .name_text:hover {
           color: $--color-primary;
         }
         .icon_discount {
           display: inline-block;
+          vertical-align: middle;
           width: 18px;
           height: 18px;
           line-height: 18px;

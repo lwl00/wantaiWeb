@@ -22,17 +22,23 @@
               :src="item.imageSrc"
               :alt="item.modelNumber"
               fit="contain"
-              lazy>
+              lazy
+              @click="handleChangeImage(item)">
             </el-image>
           </div>
 
-          <div class="">
+          <!-- <div class="">
             <el-button size="small"><i class="el-icon-search"></i> 查看效果图</el-button>
-          </div>
+          </div> -->
 
         </el-col>
         <el-col :xs="21" :sm="12" :md="12" :lg="14" :xl="14" :offset="1" class="infoWarp">
-          <div class="name">{{addForm.name}}</div>
+          <div class="name">
+            <span class="name_text">
+              {{addForm.name}}
+            </span>
+            <i class="icon_discount" v-if="addForm.discount">折</i>
+          </div>
           <dl class="infoItem">
             <dt>编号</dt>：
             <dd>{{addForm.number}}</dd>
@@ -158,7 +164,7 @@
           </dialogModel>
 
           <!-- 效果图 -->
-          <div class="imgEffect" v-if="addForm.imgEffectList.length > 0">
+          <div class="imgEffect" id="imgEffect" v-if="addForm.imgEffectList.length > 0">
             <div class="title imgEffect_title">
               效果图
             </div>
@@ -345,6 +351,13 @@
             this.choose[el] = obj[el]
           }
         }
+        console.log(this.choose)
+      },
+
+      // 选择图片
+      handleChangeImage(item) {
+        this.options.specifications = item.id
+        this.setChoose(item)
       },
 
       // 加入方案
@@ -449,10 +462,27 @@
       // 右信息
       .infoWarp {
         .name {
-          font-size: 20px;
-          color: $--color-text-primary;
-          font-weight: bold;
           margin-bottom: 25px;
+          .name_text {
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 20px;
+            color: $--color-text-primary;
+            font-weight: bold;
+          }
+          .icon_discount {
+            display: inline-block;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            text-align: center;
+            font-size: 12px;
+            color: #fff;
+            background-color: $--color-primary;
+            border-radius: 4px;
+            font-style: normal;
+          }
         }
         .infoItem {
           line-height: 20px;
