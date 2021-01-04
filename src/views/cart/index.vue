@@ -20,8 +20,7 @@
           style="width: 100%"
           highlight-current-row
           :row-class-name="rowClassName"
-          @selection-change="handleSelectionChange"
-          al>
+          @selection-change="handleSelectionChange">
           <el-table-column
             type="selection"
             width="40"
@@ -53,7 +52,7 @@
               <div class="info_warp" v-if="item.type == 'info'">
                 <div class="name">
                   <span class="name_text" @click="routerLink(scope.row)">
-                    {{scope.row.name}}
+                    {{scope.row.name}}  ---  {{scope.row.indexes}}  ---  {{scope.row.projectDetailId}}
                   </span>
                   <i class="icon_discount" v-if="scope.row.discount">折</i>
                 </div>
@@ -134,7 +133,7 @@
         title: [
           {
             label: '产品图片',
-            field: 'imgMainSrc',
+            field: 'imageSrc',
             type: 'img',
           },
           {
@@ -187,17 +186,17 @@
       // 当前方案
       if(getCookie('projectId')) {
         this.projectId = getCookie('projectId')
-        this._getProject(this.projectId)
+        this._getProject()
       }
-
     },
     mounted() {
       this.rowDrop()
     },
     methods: {
       // 获取数据
-      _getProject(projectId) {
+      _getProject() {
         this.loading = true
+        var projectId = this.projectId
         getProject(projectId).then(res => {
           this.loading = false
           if (res.status == 200) {
@@ -206,14 +205,16 @@
             // 明细表
             if(res.data.project.productSpecifiList.length > 0) {
               res.data.project.productSpecifiList.forEach(function(item, index) {
-                if(item.image) {
-                  item.imageUrl = item.imageSrc
+                if(!item.image) {
+                  item.imageSrc = '/src/common/images/image.png'
                 }
               })
+
               this.tableData = res.data.project.productSpecifiList
             }else {
               this.tableData = []
             }
+            console.log('this.tableData', this.tableData)
 
             // 选中新增的方案
             setlocalStorage('currentProject',  JSON.stringify(res.data.project))
@@ -235,8 +236,16 @@
         Sortable.create(tbody, {
           draggable: ".el-table__row",
            onEnd ({ newIndex, oldIndex }) {
-              const currRow = _this.tableData.splice(oldIndex, 1)[0];
+             console.log(newIndex, oldIndex)
+              const currRow = _this.tableData.splice(oldIndex, 1)[0];  // 被拖拽行数据
+              console.log(currRow.name)
               _this.tableData.splice(newIndex, 0, currRow);
+
+              _this.tableData.forEach(function(item, index) {
+                item.indexes = index+1
+                item.id = item.projectDetailId  // 必传
+              })
+
               console.log(_this.tableData)
               _this.handleAddProject(_this.tableData)
             }
@@ -244,23 +253,25 @@
 
       },
 
-
-      // 加入方案  TODO
+      // 编辑方案
       handleAddProject(tableData) {
 
         let currentProject = JSON.parse(localStorage.getItem('currentProject'))
 
+        currentProject.productSpecifiList = []
         currentProject.projectDetailList = tableData
         editProject(currentProject).then(res => {
           if (res.status == 200) {
             this.$message({
               offset: '120',
-              message: '加入成功',
+              message: '编辑成功',
               type: 'success'
             })
 
             // 选中新增的方案
-            setlocalStorage('currentProject',  JSON.stringify(res.data))
+            // setlocalStorage('currentProject',  JSON.stringify(res.data))
+
+            this._getProject()
           } else {
             this.$message({
               offset: '120',
@@ -307,7 +318,7 @@
               message: '删除成功',
               type: 'success'
             })
-            this._getProject(this.projectId)
+            this._getProject()
           } else {
             this.$message({
               offset: '120',
@@ -328,6 +339,8 @@
           if(item.productId === row.productId && item.specificationId === row.specificationId) {
             item.quantity = currentValue
           }
+
+          item.id = item.projectDetailId  // 必传
         })
         currentProject.projectDetailList = currentProductSpecifiList
         console.log('保存参数', currentProject)
@@ -339,7 +352,7 @@
               message: '更新成功',
               type: 'success'
             })
-            this._getProject(res.data.id)
+            this._getProject()
           } else {
             this.$message({
               offset: '120',
