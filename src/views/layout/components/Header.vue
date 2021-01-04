@@ -499,7 +499,7 @@ export default {
 #headerWarp {
     position: fixed;
     top: 0px;
-    z-index: 2999;
+    z-index: 1999;
     width: 100%;
     color: #fff;
     .header {

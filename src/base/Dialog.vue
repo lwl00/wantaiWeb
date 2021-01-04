@@ -5,6 +5,7 @@
       :visible.sync="centerDialogVisible"
       :width="width"
       top="20vh"
+      :modal-append-to-body="false"
       left>
         <slot></slot>
     </el-dialog>
