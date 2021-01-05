@@ -62,7 +62,6 @@
                   </div>
                   <div class="infoWarp">
                     <div class="name" @click="routerLink(item)">{{item.name}}</div>
-                    <div class="crafts">{{item.categorysName}}</div>
                     <div class="spec clear">
                       <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
                       <!-- <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div> -->
@@ -82,6 +81,8 @@
                       <dt>{{specItem.size}}</dt>
                       <dd>￥<span>{{specItem.unitPrice}}</span></dd>
                     </dl>
+
+                    <el-button type="primary" class="addProject" size="mini" @click="handleAddProject(item)" v-if="projectIsNow">加入方案</el-button>
                   </div> -->
                 </div>
               </el-col>
