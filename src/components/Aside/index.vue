@@ -1,27 +1,32 @@
 <template>
-  <el-menu
-    default-active="2"
-    class="brandAside"
-    @open="handleOpen"
-    @close="handleClose">
-    <el-menu-item index="1" @click="handleChangeAllserie"><i class="el-icon-menu"></i> 全部品牌</el-menu-item>
-    <el-submenu
-      v-for="(brandItem, brandIndex) in brandTreeData"
-      :key="brandIndex"
-      :index="(brandIndex+1+'')">
-      <template slot="title">
-        <i class="el-icon-menu"></i>
-        <span>{{brandItem.name}}</span>
-      </template>
-      <el-menu-item
-        v-for="(serieItem, serieIndex) in brandItem.children"
-        :key="serieIndex"
-        :index="(brandIndex+'_'+serieIndex+1+'')"
-        @click="handleChangeserie(serieItem)"
-        >{{serieItem.name}}</el-menu-item>
-    </el-submenu>
+  <div>
+    <el-scrollbar wrap-class="scrollbar-wrapper" class="aside_scrollbar">
+      <el-menu
+        unique-opened="true"
+        default-active="2"
+        class="brandAside"
+        @open="handleOpen"
+        @close="handleClose">
+        <el-menu-item index="1" @click="handleChangeAllserie"><i class="el-icon-menu"></i> 全部系列</el-menu-item>
+        <el-submenu
+          v-for="(brandItem, brandIndex) in brandTreeData"
+          :key="brandIndex"
+          :index="(brandIndex+1+'')">
+          <template slot="title">
+            <i class="el-icon-menu"></i>
+            <span>{{brandItem.name}}</span>
+          </template>
+          <el-menu-item
+            v-for="(serieItem, serieIndex) in brandItem.children"
+            :key="serieIndex"
+            :index="(brandIndex+'_'+serieIndex+1+'')"
+            @click="handleChangeserie(serieItem)"
+            >{{serieItem.name}}</el-menu-item>
+        </el-submenu>
 
-  </el-menu>
+      </el-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
 <script>
@@ -40,6 +45,7 @@
     methods: {
       // 获取数据
       _getBrandTree() {
+        var _this = this
         this.loading = true
         getBrandTree().then(res => {
           this.loading = false
@@ -48,7 +54,6 @@
           }
         })
       },
-
 
 
       handleOpen(key, keyPath) {
@@ -74,6 +79,14 @@
 </script>
 
 <style type="text/css" media="screen">
+  .aside_scrollbar {
+    height: 300px;
+  }
+  .aside_scrollbar .scrollbar-wrapper.el-scrollbar__wrap {
+    overflow-x: hidden !important;
+  }
+
+
   .brandAside {
     border: 0;
   }
@@ -82,6 +95,8 @@
   }
   .brandAside .el-menu .el-menu-item {
     width: 50%;
+    height: 40px;
+    line-height: 40px;
     min-width: auto;
     padding: 0 !important;
     text-align: center;
@@ -91,6 +106,18 @@
     background-color: #f5f5f5;
   }
   .brandAside>.el-menu-item {
+    height: 40px;
+    line-height: 40px;
     padding: 0 10px !important;
+  }
+</style>
+
+
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "./element-variables.scss";
+
+  .aside_scrollbar {
+    height: calc(100vh - 180px);
   }
 </style>
