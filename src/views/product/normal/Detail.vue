@@ -120,7 +120,7 @@
                       :preview-src-list="table.srcList"
                       ref="foo">
                     </el-image>
-                    <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
+                    <!-- <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button> -->
                   </div>
                   <div class="infoWarp">
                     <div class="name">

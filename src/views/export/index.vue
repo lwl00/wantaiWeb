@@ -18,6 +18,7 @@
             <p>{{currentProject.companyName}}</p>
             <p>{{currentProject.contact}}</p>
             <p>{{currentProject.phone}}</p>
+            <p>{{currentProject.remark}}</p>
           </div>
         </section>
         <section class="aside_section">
@@ -43,6 +44,7 @@
             <p>{{customer.company}}</p>
             <p>{{customer.name}}</p>
             <p>{{customer.phone}}</p>
+            <p>{{customer.remark}}</p>
           </div>
         </section>
 
@@ -98,11 +100,13 @@
               采购方：{{currentProject.companyName}} <br/>
               联系人：{{currentProject.contact}} <br/>
               联系电话：{{currentProject.phone}} <br/>
+              地址：{{currentProject.remark}} <br/>
             </div>
             <div class="supply">
               供货方：{{customer.company}} <br/>
               联系人：{{customer.name}} <br/>
               联系电话：{{customer.phone}} <br/>
+              地址：{{customer.remark}} <br/>
             </div>
           </div>
         </div>
@@ -369,7 +373,6 @@
           fieldStr : fieldStr,
           fieldTail: 'amount,name,companyName,contact,phone,customerName',  // 写死
         }
-      console.log(exportProjectDetail(params))
         window.location.href = exportProjectDetail(params)
       }
 

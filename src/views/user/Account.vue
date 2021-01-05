@@ -25,6 +25,10 @@
           <dt>联系电话</dt>：
           <dd>{{customer.phone}}</dd>
         </dl>
+        <dl class="infoItem">
+          <dt>地址</dt>：
+          <dd>{{customer.remark}}</dd>
+        </dl>
       </div>
     </section>
   </div>

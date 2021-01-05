@@ -98,7 +98,7 @@ export default {
           type: 'input',
         },
         {
-          label: '客户名称',
+          label: '业务员',
           field: 'customerName',
           value: '',
           type: 'input',
@@ -149,10 +149,6 @@ export default {
             click: this.handleDblclick
           },
           {
-            label: '客户名称',
-            field: 'customerName',
-          },
-          {
             label: '公司名称',
             field: 'companyName',
             width: 200,
@@ -166,9 +162,18 @@ export default {
             field: 'phone',
           },
           {
+            label: '地址',
+            field: 'remark',
+            width: 200,
+          },
+          {
             label: '总金额',
             field: 'amount',
             width: 100,
+          },
+          {
+            label: '业务员',
+            field: 'customerName',
           },
           {
             label: '创建人',

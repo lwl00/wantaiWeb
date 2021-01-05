@@ -51,8 +51,9 @@
               <!-- 信息 -->
               <div class="info_warp" v-if="item.type == 'info'">
                 <div class="name">
-                  <span class="name_text" @click="routerLink(scope.row)">
-                    {{scope.row.name}}
+                  <span class="name_text">
+                    <router-link tag="a" target="_blank"
+                      :to="{name: 'ProductDetail', query:{id: scope.row.productId}}">{{scope.row.name}}</router-link>
                   </span>
                   <i class="icon_discount" v-if="scope.row.discount">折</i>
                 </div>
@@ -236,9 +237,7 @@
         Sortable.create(tbody, {
           draggable: ".el-table__row",
            onEnd ({ newIndex, oldIndex }) {
-             console.log(newIndex, oldIndex)
               const currRow = _this.tableData.splice(oldIndex, 1)[0];  // 被拖拽行数据
-              console.log(currRow.name)
               _this.tableData.splice(newIndex, 0, currRow);
 
               _this.tableData.forEach(function(item, index) {
@@ -246,7 +245,6 @@
                 item.id = item.projectDetailId  // 必传
               })
 
-              console.log(_this.tableData)
               _this.handleAddProject(_this.tableData)
             }
         });
@@ -362,16 +360,6 @@
           }
         })
       },
-      // 跳转详情页
-      routerLink(item) {
-        console.log(item)
-        this.$router.push({
-          name: 'ProductDetail',
-          query: {
-            id: item.productId
-          }
-        })
-      },
       // 跳转导出页
       routerExportLink() {
         this.$router.push({
@@ -383,13 +371,12 @@
       },
       // 跳转产品列表页
       routerProductLink() {
-        this.$router.push({
-          name: 'ProductNormal',
-          query: {}
-        })
+        let routeData = this.$router.resolve({
+          name: "ProductNormal",
+          query: {},
+        });
+        window.open( routeData.href , '_blank' )
       },
-
-
 
     },
   }
@@ -463,6 +450,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 2;
     .chooseAll_warp {
       float: left;
       .delAll {

@@ -121,6 +121,16 @@
                 class="pull-left"
                 placeholder="请输入联系电话"></el-input>
             </el-form-item>
+            <el-form-item
+              label="地址"
+              :label-width="formLabelWidth"
+              prop="">
+              <el-input
+                v-model="projectFrom.remark"
+                style="width:200px;"
+                class="pull-left"
+                placeholder="请输入地址"></el-input>
+            </el-form-item>
           </el-form>
         </div>
         <div class="dialog-model-footer">
@@ -160,6 +170,7 @@ export default {
         'roles',
         'token',
         'projectIsNow',
+        'customer',
       ])
     },
     data() {
@@ -231,6 +242,7 @@ export default {
       }
       console.log(this.currentProject)
       console.log(this.projectIsNow)
+      console.log(this.customer)
 
     },
     methods: {
@@ -333,10 +345,9 @@ export default {
         delCookie('projectId')
         this.currentProject = ''
         setlocalStorage('currentProject', '')
-        console.log(this.$route.path)
 
         // 购物车回到主页
-        if(this.$route.path == '/cart') {
+        if(this.$route.path == '/cart' || this.$route.path == '/export' ) {
           this.$router.push('/');
         }
 
@@ -352,7 +363,7 @@ export default {
           amount: 0,
           companyName: "",
           contact: "",
-          customerName: "",
+          customerName: this.customer.name,
           phone: "",
           projectDetailList: [],
           remark: ""
@@ -407,16 +418,13 @@ export default {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let params = this.projectFrom
+            params.customerName = this.customer.name
             console.log('提交保存参数', params)
-            // this.addSaveLoading = true
+            this.addSaveLoading = true
 
             if(this.projectIsNow || this.projectFrom.id) {  // 编辑
               // TODO
-              params.projectDetailList = JSON.parse(localStorage.getItem('currentProject')).projectDetailList
-              console.log(typeof(params.projectDetailList))
-              if(typeof(params.projectDetailList) == 'object') {
-                params.projectDetailList = []
-              }
+              params.projectDetailList = JSON.parse(localStorage.getItem('currentProject')).productSpecifiList
               editProject(params).then(res => {
                 if (res.status == 200) {
                   this.$message({
