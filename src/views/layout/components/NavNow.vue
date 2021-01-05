@@ -66,17 +66,15 @@
 
       // 跳转购物车
       routerLinkCart() {
-        this.$router.push({
-          name: 'Cart',
-          query: {}
-        })
+        let routeData = this.$router.resolve({
+          name: "Cart",
+          query: {},
+        });
+        window.open( routeData.href , '_blank' )
       }
     },
     watch: {
-      // currentProject(newVal, oldVal) {
-      //   console.log(newVal)
-      //   console.log(oldVal)
-      // }
+
     }
   }
 </script>

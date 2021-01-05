@@ -123,7 +123,10 @@
                     <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
                   </div>
                   <div class="infoWarp">
-                    <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                    <div class="name">
+                      <router-link tag="a" target="_blank"
+                        :to="{name: 'ProductDetail', query:{id: item.id}}">{{item.name}}</router-link>
+                    </div>
                     <div class="spec clear">
                       <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
                       <!-- <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div> -->
@@ -307,7 +310,6 @@
 
             // 默认选中第一个规格，
             this.setChoose(res.data.product.specificationList[0])
-            console.log(this.choose)
 
 
             // 效果图
@@ -337,12 +339,10 @@
       },
       // 数量加减
       handleChangeQuantity(currentValue, oldValue) {
-        console.log(currentValue, oldValue);
-        console.log(this.choose.quantity);
+
       },
       // 选择规格
       handleChangeSpecRadio(e, item) {
-        console.log(e, item)
         this.setChoose(item)
       },
       // 设置选中规格数据，展示其单价、型号、体积
@@ -352,7 +352,6 @@
             this.choose[el] = obj[el]
           }
         }
-        console.log(this.choose)
       },
 
       // 选择图片
@@ -412,19 +411,8 @@
 
       // 加入方案弹窗s
       handleAddProject(item) {
-        console.log(item)
         this.dialogProduct = item
         this.show('dialog-model-addCart')
-      },
-
-      // 跳转详情页
-      routerLink(item) {
-        this.$router.push({
-          name: 'ProductDetail',
-          query: {
-            id: item.id
-          }
-        })
       },
 
 

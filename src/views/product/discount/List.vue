@@ -70,7 +70,10 @@
                     <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button>
                   </div>
                   <div class="infoWarp">
-                    <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                    <div class="name">
+                      <router-link tag="a" target="_blank"
+                        :to="{name: 'ProductDetail', query:{id: item.id}}">{{item.name}}</router-link>
+                    </div>
                     <div class="spec clear">
                       <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
                       <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div>
@@ -291,7 +294,6 @@
       // 复制图片
       copy (e) {
         this.$nextTick(function () {//nextTick,当前dom渲染完毕的回调
-          console.log('foo', this.$refs.foo)//打印获取的dom
           const selection = window.getSelection()
           const range = document.createRange()
           range.selectNode(this.$refs.foo)//传入dom
@@ -303,19 +305,8 @@
 
       // 加入方案  TODO
       handleAddProject(item) {
-        console.log(item)
         this.dialogProduct = item
         this.show('dialog-model-addCart')
-      },
-
-      // 跳转详情页
-      routerLink(item) {
-        this.$router.push({
-          name: 'ProductDetail',
-          query: {
-            id: item.id
-          }
-        })
       },
 
 

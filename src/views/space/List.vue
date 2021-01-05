@@ -21,11 +21,13 @@
                   </el-image>
                 </div>
                 <div class="infoWarp">
-                  <div class="name" @click="routerLink(item)">{{item.name}}</div>
+                  <div class="name">
+                    <router-link tag="a" target="_blank"
+                      :to="{name: 'SpaceDetail', query:{id: item.id}}">{{item.name}}</router-link>
+                  </div>
                 </div>
               </div>
             </el-col>
-
           </el-row>
 
 
@@ -119,17 +121,6 @@ export default {
     handleCurrentChange: function (val) {
       this.table.pageNum = val
       this._getSpaceList(this.table.pageNum, this.table.pageSize);
-    },
-
-
-    // 跳转详情页
-    routerLink(item) {
-      this.$router.push({
-        name: 'SpaceDetail',
-        query: {
-          id: item.id
-        }
-      })
     },
 
   }
