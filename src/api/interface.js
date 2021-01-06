@@ -336,9 +336,25 @@ export function getProject(id) {
 
   return ajaxGet(url)
 }
-// 导出明细
+// 导出明细(横向)
 export function exportProjectDetail(params) {
   let url = `${base}/project/id=${params.id}/export`
+
+  return (
+    api +
+    url +
+    '?fieldTail=' +
+    params.fieldTail +
+    '&nameStr=' +
+    params.nameStr +
+    '&fieldStr=' +
+    params.fieldStr +
+    ''
+  )
+}
+// 导出明细(纵向)
+export function exportProjectDetailSmall(params) {
+  let url = `${base}/project/id=${params.id}/exportSmall`
 
   return (
     api +

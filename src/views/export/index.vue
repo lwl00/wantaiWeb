@@ -52,7 +52,8 @@
       </el-col>
       <el-col :xs="16" :sm="18" :md="18" :lg="19" :xl="19" :offset="0" class="container">
         <div class="project_operat">
-          <el-button type="primary" size="small" @click="hanldeExportProject">导出报价清单</el-button>
+          <el-button type="primary" size="small" @click="hanldeExportProjectSmall">导出报价清单(纵向)</el-button>
+          <el-button type="primary" size="small" @click="hanldeExportProject">导出报价清单(横向)</el-button>
         </div>
         <div class="project_name">{{currentProject.name}}</div>
 
@@ -123,7 +124,7 @@
   import Sortable from 'sortablejs';
   import { setlocalStorage, getCookie, setCookie, delCookie, convertCurrency } from 'common/js/dom';
   import { mapGetters } from 'vuex';
-  import { getProject, editProject, addCartProject, exportProjectDetail } from 'api/interface';
+  import { getProject, editProject, addCartProject, exportProjectDetail, exportProjectDetailSmall } from 'api/interface';
   const columns = [];
   export default {
     name: "Export",
@@ -354,7 +355,7 @@
           }
         })
       },
-
+      // 横向导出
       hanldeExportProject() {
         var nameStr = ''
         var fieldStr = ''
@@ -374,7 +375,28 @@
           fieldTail: 'amount,name,companyName,contact,phone,customerName',  // 写死
         }
         window.location.href = exportProjectDetail(params)
-      }
+      },
+      // 纵向导出
+      hanldeExportProjectSmall() {
+        var nameStr = ''
+        var fieldStr = ''
+        this.title.map((item, index) => {
+          if(!item.hidden) {
+            nameStr += item.label+','
+            fieldStr += item.type+','
+          }
+          nameStr.slice(0,nameStr.length-1)
+          fieldStr.slice(0,fieldStr.length-1)
+        })
+
+        var params = {
+          id: this.projectId,
+          nameStr: nameStr,
+          fieldStr : fieldStr,
+          fieldTail: 'amount,name,companyName,contact,phone,customerName',  // 写死
+        }
+        window.location.href = exportProjectDetailSmall(params)
+      },
 
     },
   }

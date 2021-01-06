@@ -74,11 +74,11 @@
                       <router-link tag="a" target="_blank"
                         :to="{name: 'ProductDetail', query:{id: item.id}}">{{item.name}}</router-link>
                     </div>
-                    <div class="spec clear">
+                    <div class="spec clear" v-if="item.specificationList.length > 0">
                       <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>
                       <div class="specTextMore pull-right" @mouseenter="item.isShowProLayer = !item.isShowProLayer">更多规格</div>
                     </div>
-                    <div class="price clear">
+                    <div class="price clear" v-if="item.specificationList.length > 0">
                       <div class="priceText pull-left">￥<span>{{item.specificationList[0].unitPrice}}</span></div>
                       <div class="priceBtn pull-right">
                         <el-button type="primary" size="mini" @click="handleAddProject(item)" v-if="projectIsNow">加入方案</el-button>
