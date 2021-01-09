@@ -5,12 +5,13 @@
     class="brandAside"
     @open="handleOpen"
     @close="handleClose">
-    <el-menu-item index="1" @click="handleChangeAllserie"> 全部系列</el-menu-item>
+    <el-menu-item index="1" @click="handleChangeAllserie"><i class="el-icon-menu"></i> 全部系列</el-menu-item>
     <el-submenu
       v-for="(brandItem, brandIndex) in brandTreeData"
       :key="brandIndex"
       :index="(brandIndex+1+'')">
       <template slot="title">
+        <i class="el-icon-menu"></i> 
         <span>{{brandItem.name}}</span>
       </template>
       <el-menu-item
