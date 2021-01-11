@@ -16,6 +16,7 @@
           <div class="proImg_small_warp">
             <el-image
               class="proImg_small"
+              :class="{ active: item.id == choose.id }"
               v-for="(item, index) in options.specificationsOptions"
               v-if="item.image"
               :key="index"
@@ -307,10 +308,9 @@
             this.addForm = res.data.product
             this.options.specifications = res.data.product.specificationList[0].id
             this.options.specificationsOptions = res.data.product.specificationList
-
+            
             // 默认选中第一个规格，
             this.setChoose(res.data.product.specificationList[0])
-
 
             // 效果图
             if(res.data.product.imgEffectList && res.data.product.imgEffectList.length > 0) {
@@ -443,6 +443,10 @@
             display: inline-block;
             width: 20%;
             margin: 0 3px;
+            border: 2px solid transparent;
+          }
+          .proImg_small.active {
+            border-color: $--color-primary;
           }
         }
 

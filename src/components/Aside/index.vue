@@ -11,7 +11,7 @@
       :key="brandIndex"
       :index="(brandIndex+1+'')">
       <template slot="title">
-        <i class="el-icon-menu"></i> 
+        <i class="el-icon-menu"></i>
         <span>{{brandItem.name}}</span>
       </template>
       <el-menu-item
@@ -96,6 +96,12 @@
     height: 35px;
     line-height: 35px;
     padding: 0 10px !important;
+  }
+
+  .el-submenu .el-submenu__title {
+    height: 35px;
+    line-height: 35px;
+    padding-left: 10px !important;
   }
 </style>
 

@@ -16,13 +16,15 @@
           <div class="proImg_small_warp">
             <el-image
               class="proImg_small"
+              :class="{ active: item.id == choose.id }"
               v-for="(item, index) in addForm.spaceImgList"
               v-if="item.image"
               :key="index"
               :src="item.imageSrc"
               :alt="item.id"
               fit="contain"
-              lazy>
+              lazy
+              @click="handleChangeImage(item)">
             </el-image>
           </div>
 
@@ -202,16 +204,25 @@
           if (res.status == 200) {
             this.addForm = res.data.space
 
+            // 图片
+            if(res.data.space.spaceImgList && res.data.space.spaceImgList.length > 0) {
+              res.data.space.spaceImgList.forEach((item, index) => {
+                item.isShowProLayer = false
+                if(!item.image) {
+                  item.imageSrc = '/src/common/images/image.png'
+                }
+                this.addForm.spaceImgList.push(item.imageSrc)
+              })
+            }
 
             // 默认选中第一个规格，
             this.setChoose(res.data.space.spaceImgList[0])
-
 
             // 关联产品
             if(res.data.space.productList && res.data.space.productList.length > 0) {
               res.data.space.productList.forEach((item, index) => {
                 item.isShowProLayer = false
-                if(!item.imgMain) {
+                if(item.imgMain) {
                   item.imgMainSrc = '/src/common/images/image.png'
                 }
                 this.table.srcList.push(item.imgMainSrc)
@@ -229,6 +240,10 @@
         for(var el in this.choose) {
           this.choose[el] = obj[el]
         }
+      },
+      // 选择图片
+      handleChangeImage(item) {
+        this.setChoose(item)
       },
 
 
@@ -283,6 +298,10 @@
             display: inline-block;
             width: 20%;
             margin: 0 3px;
+            border: 2px solid transparent;
+          }
+          .proImg_small.active {
+            border-color: $--color-primary;
           }
         }
 
