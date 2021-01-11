@@ -27,14 +27,14 @@
           size="small">
           <el-radio-group v-model="choose.id">
             <el-radio
-              style="display: inline-block;width: 180px;margin: 5px 10px 5px 0;"
+              style="display: inline-block;width: 160px;margin: 5px 10px 5px 0;text-align: center;padding: 8px 10px 0 10px;"
               v-for="(item, index) in dialogProduct.specificationList"
               :key="index"
               :label="item.id"
               border
               size="medium"
               @change="handleChangeSpecRadio($event, item)">
-              {{item.modelNumber}}  {{item.size}}</el-radio>
+              {{item.size}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item
@@ -174,4 +174,10 @@
 </script>
 
 <style>
+  .dialog-model-content .el-radio__input {
+    display: none;
+  }
+  .dialog-model-content .el-radio__label {
+    padding: 0;
+  }
 </style>

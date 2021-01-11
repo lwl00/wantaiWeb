@@ -65,7 +65,7 @@
             <dd style="max-width: 500px;">
               <el-radio-group v-model="options.specifications">
                 <el-radio
-                  style="display: inline-block;width: 140px;margin: 5px 10px 5px 0;"
+                  style="display: inline-block;width: 160px;margin: 5px 10px 5px 0;text-align: center;padding: 10px;"
                   v-for="(item, index) in options.specificationsOptions"
                   :key="index"
                   :label="item.id"
@@ -308,7 +308,7 @@
             this.addForm = res.data.product
             this.options.specifications = res.data.product.specificationList[0].id
             this.options.specificationsOptions = res.data.product.specificationList
-            
+
             // 默认选中第一个规格，
             this.setChoose(res.data.product.specificationList[0])
 
