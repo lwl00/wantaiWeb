@@ -51,21 +51,22 @@
                 :key="index">
                 <div class="proItem">
                   <div class="imgWarp">
-                    <el-image
-                      class="proImg"
-                      :src="item.imgMainSrc"
-                      alt=""
-                      fit="contain"
-                      lazy
-                      :preview-src-list="table.srcList"
-                      ref="foo">
-                    </el-image>
+                    <router-link tag="a" target="_blank"
+                      :to="{name: 'ProductDetail', query:{id: item.id}}">
+                        <el-image
+                        class="proImg"
+                        :src="item.imgMainSrc"
+                        alt=""
+                        lazy
+                        ref="foo">
+                      </el-image>
+                      <!-- 大图展示 :preview-src-list="table.srcList" -->
                     <!-- <el-button type="text" class="copy" title="复制" @click="copy"><i class="el-icon-document-copy"></i></el-button> -->
+                    </router-link>
                   </div>
                   <div class="infoWarp">
                     <div class="name">
-                      <router-link tag="a" target="_blank"
-                        :to="{name: 'ProductDetail', query:{id: item.id}}">{{item.name}}</router-link>
+                      {{item.name}}
                     </div>
                     <div class="spec clear">
                       <div class="specText pull-left" :title="item.specificationList[0].size">{{item.specificationList[0].size}}</div>

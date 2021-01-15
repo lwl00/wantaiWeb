@@ -10,12 +10,10 @@
   // imgWarp
   .imgWarp {
     position: relative;
+    min-height: 140px;
     .proImg {
       display: block;
       width: 100%;
-    }
-    .proImg:hover {
-      cursor: zoom-out;
     }
     .copy {
       position: absolute;
@@ -46,9 +44,6 @@
       line-clamp: 1;
       -webkit-box-orient: vertical;
     }
-    .name:hover {
-      color: $--color-primary;
-    }
     .spec {
       display: flex;
       margin: 15px 0;
@@ -64,6 +59,7 @@
       }
       .specTextMore {
         width: 60px;
+        color: $--color-primary;
         cursor: pointer;
       }
     }

@@ -16,7 +16,7 @@
           </el-button-group>
 
           <el-dropdown style="line-height: normal;">
-            <span class="el-dropdown-link" style="cursor: pointer;">
+            <span class="el-dropdown-link" style="cursor: pointer;color: #e0e0e0;">
               <i class="fa fa-user" aria-hidden="true"></i>
               {{name}}
               <i class="el-icon-arrow-down el-icon--right"></i>
@@ -26,7 +26,7 @@
                 <router-link :to="{name:'Account'}"><i class="fa fa-user" aria-hidden="true"></i> 个人中心</router-link>
               </el-dropdown-item>
               <el-dropdown-item>
-                <router-link :to="{name:'ProjectList'}"><i class="fa fa-sign-out" aria-hidden="true"></i> 历史方案</router-link>
+                <router-link :to="{name:'ProjectList'}"><i class="fa el-icon-s-data" aria-hidden="true"></i> 历史方案</router-link>
               </el-dropdown-item>
               <el-dropdown-item >
                 <div @click="_logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</div>
