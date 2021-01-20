@@ -105,11 +105,18 @@
         }
       }
     }
-    .addProject {
-      width: calc(100% - 24px);
+    .operat {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 26%;
+      .addProject {
+        width: calc(100% - 24px);
+        position: absolute;
+        bottom: 12px;
+        left: 12px;
+      }
     }
   }
 }
