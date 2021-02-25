@@ -38,6 +38,7 @@
 import Search from '@/components/Search'
 import Table from '@/components/Table'
 import Dialog from 'base/Dialog';
+import { mapGetters } from 'vuex';
 import { deleteBlankSpace, formatSearch, calculateTableHeight, tableBtnPermissions, routerLinkPage, formatBrandTreeData } from 'common/js/dom';
 import { getDictsData, getProjectList, delProject, exportProjectDetail } from 'api/interface';
 
@@ -46,6 +47,11 @@ export default {
     Search,
     Table,
     'dialogModel': Dialog,
+  },
+  computed: {
+    ...mapGetters([
+      'customer',
+    ])
   },
   name: "ProductList",
   data() {
@@ -300,6 +306,7 @@ export default {
     // 获取列表数据
     _getProjectList: function (pageNum, pageSize) {
       var params = this.search
+      params.creator = this.customer.username,
       params.pageNum = pageNum,
       params.pageSize = pageSize,
 

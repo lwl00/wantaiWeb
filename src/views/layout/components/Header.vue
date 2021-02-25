@@ -283,6 +283,7 @@ export default {
           name: '',
           companyName: '',
           contact: '',
+          creator: this.customer.username,
           createdTime: '',
           pageNum: pageNum,
           pageSize: pageSize,
