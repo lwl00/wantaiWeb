@@ -98,6 +98,7 @@
 
 
     <!-- 顶部悬浮行 -->
+    <div style="height: 60px;"></div>
     <el-row :gutter="0" class="footNav">
       <el-col :xs="22" :sm="22" :md="22" :lg="22" :xl="22" :offset="1" class="">
 
@@ -236,6 +237,7 @@
         const _this = this;
         Sortable.create(tbody, {
           draggable: ".el-table__row",
+          handle: ".image_warp",
            onEnd ({ newIndex, oldIndex }) {
               const currRow = _this.tableData.splice(oldIndex, 1)[0];  // 被拖拽行数据
               _this.tableData.splice(newIndex, 0, currRow);
@@ -258,7 +260,9 @@
 
         currentProject.productSpecifiList = []
         currentProject.projectDetailList = tableData
+        this.loading = true
         editProject(currentProject).then(res => {
+          this.loading = false
           if (res.status == 200) {
             this.$message({
               offset: '120',
@@ -388,7 +392,7 @@
 
   .CartPage {
     .image_warp {
-
+      cursor: move;
     }
     .info_warp {
       .name {
